@@ -155,7 +155,7 @@ select option{background:var(--panel)}
 .hero-sub{font-size:.78rem;color:var(--m2);margin-top:2px}
 .phase-pill{
   display:inline-flex;align-items:center;gap:5px;
-  background:rgba(232,255,71,.08);border:1px solid rgba(232,255,71,.25);
+  background:rgba(244,196,48,.08);border:1px solid rgba(244,196,48,.25);
   color:var(--accent);border-radius:99px;padding:3px 10px;
   font-size:.62rem;font-weight:700;margin-top:6px;
 }
