@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#07070e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="description" content="HYROX 12-Week Training Hub — cross-device progress tracking with GitHub sync">
+<link rel="manifest" href="manifest.json">
+<title>SG Workout — HYROX Training Hub</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- LOADING -->
+<div id="loadingOverlay">
+  <div style="font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;font-weight:900;color:#e8ff47;letter-spacing:1px"><em style="font-style:normal">SG</em> Workout</div>
+  <div style="font-size:.78rem;color:#606090">Loading your training data…</div>
+  <div class="spin-ring"></div>
+</div>
+
+<!-- HEADER -->
+<header class="hdr">
+  <div class="hdr-inner">
+    <div class="logo"><em>SG</em> Workout <small>by sgavade</small></div>
+    <div id="userInfo" style="font-size:.72rem;color:var(--m2);white-space:nowrap"></div>
+    <nav class="nav-wrap">
+      <button class="npill active" data-nav="dash" onclick="nav('dash',this)">Dashboard</button>
+      <button class="npill" data-nav="calendar" onclick="nav('calendar',this)">Calendar</button>
+      <button class="npill" data-nav="week" onclick="nav('week',this)">This Week</button>
+      <button class="npill" data-nav="program" onclick="nav('program',this)">Program</button>
+      <button class="npill" data-nav="log" onclick="nav('log',this)">Log</button>
+      <button class="npill" data-nav="settings" onclick="nav('settings',this)">⚙ Settings</button>
+    </nav>
+    <!-- Program switcher — visible on all screens -->
+    <div class="prog-switcher">
+      <button id="progBtn_hyrox"  class="prog-sw-btn prog-btn-active" onclick="setActiveProgram('hyrox')">🏁 HYROX</button>
+      <button id="progBtn_gym"    class="prog-sw-btn" onclick="setActiveProgram('gym')">🏋️ Gym</button>
+      <button id="progBtn_wl"     class="prog-sw-btn" onclick="setActiveProgram('wl')">🔥 Weight Loss</button>
+      <button id="progBtn_custom" class="prog-sw-btn" onclick="setActiveProgram('custom')">🔨 Custom</button>
+    </div>
+    <div class="hdr-right">
+      <span class="sync-badge" id="syncBadge1">—</span>
+      <button onclick="signOut()" style="background:transparent;border:1px solid var(--b2);color:var(--m2);font-size:.7rem;padding:5px 11px;border-radius:var(--rsm);cursor:pointer;white-space:nowrap">Sign out</button>
+      <button class="btn-plus" onclick="openModal()">+ Log</button>
+    </div>
+  </div>
+</header>
+
+<main class="page">
+
+<!-- ═══════════════════ DASHBOARD ═══════════════════ -->
+<section class="screen active" id="screen-dash">
+  <!-- Hero -->
+  <div class="hero-band">
+    <div>
+      <div class="hero-label">Program Progress</div>
+      <div class="hero-num" id="d-pct">0%</div>
+      <div class="phase-pill"><span class="pdot"></span><span id="d-phase">Phase 1</span></div>
+    </div>
+    <div class="hero-info">
+      <div class="hero-sub" id="d-sub">Week 1 of 12</div>
+      <div class="pbar"><div class="pfill" id="d-progbar" style="width:0%"></div></div>
+      <div class="pbar-meta"><span id="d-remain">12 weeks remaining</span></div>
+    </div>
+    <div style="text-align:right;flex-shrink:0">
+      <div style="font-size:.6rem;color:var(--m1);margin-bottom:2px">Active Program</div>
+      <div id="d-prog-label" style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;color:var(--accent)">HYROX 12-Week</div>
+      <div style="font-size:.62rem;color:var(--m1);margin-top:2px">Est. finish <strong style="color:var(--orange)">~2:10</strong> → Target <strong style="color:var(--accent)">Sub-1:45</strong></div>
+    </div>
+  </div>
+  <!-- Stats -->
+  <div class="stat-grid">
+    <div class="stat-card"><div class="stat-val" style="color:var(--blue)" id="d-runs">0</div><div class="stat-lbl">Runs Logged</div><div class="stat-delta d-neutral" id="d-runs-d">—</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:var(--green)" id="d-miles">0.0</div><div class="stat-lbl">Total Miles</div><div class="stat-delta d-neutral">—</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:var(--orange)" id="d-z2">—</div><div class="stat-lbl">Best Z2 Pace</div><div class="stat-delta" style="color:var(--m2)">vs baseline 13:01/mi</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:var(--accent)" id="d-sess">0</div><div class="stat-lbl">Total Sessions</div><div class="stat-delta d-neutral" id="d-sess-d">Start logging!</div></div>
+  </div>
+  <!-- Charts -->
+  <div class="three-col">
+    <div class="card"><div class="ctitle">Z2 Pace (min/mile) — ↓ better</div><div class="chart-box"><canvas id="chartPace"></canvas></div><div style="font-size:.62rem;color:var(--m1);margin-top:3px">Baseline <strong style="color:var(--text)">13:01</strong> → Target <strong style="color:var(--accent)">10:00</strong></div></div>
+    <div class="card"><div class="ctitle">Avg Heart Rate — bpm</div><div class="chart-box"><canvas id="chartHR"></canvas></div><div style="font-size:.62rem;color:var(--m1);margin-top:3px">Baseline <strong style="color:var(--text)">170 bpm</strong> → goal: ↓ over time</div></div>
+    <div class="card"><div class="ctitle">Weekly Mileage</div><div class="chart-box"><canvas id="chartMiles"></canvas></div></div>
+  </div>
+  <div class="two-col" style="margin-bottom:14px">
+    <div class="card"><div class="ctitle">Body Weight (lb)</div><div class="chart-box" style="height:130px"><canvas id="chartWeight"></canvas></div></div>
+    <div class="card"><div class="ctitle">Improvement vs Last Session</div><div id="improveGrid"></div></div>
+  </div>
+  <!-- Today + Week -->
+  <div class="two-col">
+    <div>
+      <div class="sh"><div class="sh-title">Today's <span>Training</span></div><div class="sh-line"></div></div>
+      <div id="todayCard"></div>
+    </div>
+    <div>
+      <div class="sh"><div class="sh-title">This <span>Week</span></div><div class="sh-line"></div></div>
+      <div class="wg-grid" id="weekGlance"></div>
+    </div>
+  </div>
+  <!-- Recent -->
+  <div class="sh" style="margin-top:8px"><div class="sh-title">Recent <span>Activity</span></div><div class="sh-line"></div><button class="sh-btn" onclick="nav('log',document.querySelector('[data-nav=log]'))">View all →</button></div>
+  <div class="card" style="padding:0;overflow:hidden">
+    <table style="width:100%;border-collapse:collapse">
+      <thead><tr style="font-size:.6rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--m1)">
+        <th style="padding:8px 12px;border-bottom:1px solid var(--b1);text-align:left">Date</th>
+        <th style="padding:8px 12px;border-bottom:1px solid var(--b1);text-align:left">Type</th>
+        <th style="padding:8px 12px;border-bottom:1px solid var(--b1);text-align:left">Dist</th>
+        <th style="padding:8px 12px;border-bottom:1px solid var(--b1);text-align:left">Time</th>
+        <th style="padding:8px 12px;border-bottom:1px solid var(--b1);text-align:left">Pace</th>
+        <th style="padding:8px 12px;border-bottom:1px solid var(--b1);text-align:left">HR</th>
+        <th style="padding:8px 12px;border-bottom:1px solid var(--b1);text-align:left">Cad</th>
+        <th style="padding:8px 12px;border-bottom:1px solid var(--b1);text-align:left">Effort</th>
+      </tr></thead>
+      <tbody id="recentBody"></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════════════ CALENDAR ═══════════════════ -->
+<section class="screen" id="screen-calendar">
+  <div class="cal-nav">
+    <button class="cal-prev-btn" id="calPrev">← Prev</button>
+    <div class="cal-month" id="calTitle"></div>
+    <button class="cal-next-btn" id="calNext">Next →</button>
+  </div>
+  <div class="cal-legend">
+    <div class="cal-li"><div class="cal-ld" style="background:#00c8f0"></div>Run/Cardio</div>
+    <div class="cal-li"><div class="cal-ld" style="background:#ff3d55"></div>Strength</div>
+    <div class="cal-li"><div class="cal-ld" style="background:#e8ff47"></div>HYROX</div>
+    <div class="cal-li"><div class="cal-ld" style="background:#606090"></div>Rest</div>
+    <div class="cal-li"><div class="cal-ld" style="background:#3df59e"></div>All complete</div>
+  </div>
+  <div class="card" style="padding:0;overflow:hidden"><div class="cal-grid" id="calGrid"></div></div>
+  <div id="dayPanelWrap"></div>
+</section>
+
+<!-- ═══════════════════ THIS WEEK ═══════════════════ -->
+<section class="screen" id="screen-week">
+  <div class="wk-nav-row">
+    <button class="wk-nav-btn" id="wkPrev">←</button>
+    <div class="wk-nav-title" id="wkTitle"></div>
+    <button class="wk-nav-btn" id="wkNext">→</button>
+  </div>
+  <div class="day-tabs-row" id="dayTabsRow"></div>
+  <div id="wkDayContent"></div>
+</section>
+
+<!-- ═══════════════════ PROGRAM ═══════════════════ -->
+<section class="screen" id="screen-program">
+  <div class="plan-tab-row">
+    <button class="plan-tab-btn active" onclick="switchPlanTab('hyrox',this)"><span class="plan-tab-icon">🏁</span><span class="plan-tab-lbl">HYROX Plan</span></button>
+    <button class="plan-tab-btn" onclick="switchPlanTab('gym',this)"><span class="plan-tab-icon">🏋️</span><span class="plan-tab-lbl">Beginner Gym</span></button>
+    <button class="plan-tab-btn" onclick="switchPlanTab('wl',this)"><span class="plan-tab-icon">🔥</span><span class="plan-tab-lbl">Weight Loss</span></button>
+    <button class="plan-tab-btn" onclick="switchPlanTab('stations',this)"><span class="plan-tab-icon">🎯</span><span class="plan-tab-lbl">8 Stations</span></button>
+    <button class="plan-tab-btn" onclick="switchPlanTab('benchmarks',this)"><span class="plan-tab-icon">📊</span><span class="plan-tab-lbl">Benchmarks</span></button>
+    <button class="plan-tab-btn" onclick="switchPlanTab('builder',this)"><span class="plan-tab-icon">🔨</span><span class="plan-tab-lbl">Custom Builder</span></button>
+  </div>
+
+  <!-- HYROX Plan -->
+  <div id="pt-hyrox">
+    <div class="wk-sel-grid" id="wkSelGrid"></div>
+    <div class="two-col">
+      <div class="card">
+        <div class="ctitle" id="planWkTitle">Week 1</div>
+        <div id="planWkBody"></div>
+      </div>
+      <div>
+        <div class="card">
+          <div class="ctitle">🫀 Your HR Zones</div>
+          <div class="z-row"><div class="z-dot" style="background:#6b7cff"></div><div class="z-name" style="color:#6b7cff">Z1</div><div class="z-range">&lt;112 bpm</div><div class="z-desc">Recovery/walk</div><div class="z-bar"><div class="z-fill" style="width:15%;background:#6b7cff"></div></div></div>
+          <div class="z-row"><div class="z-dot" style="background:var(--blue)"></div><div class="z-name" style="color:var(--blue)">Z2</div><div class="z-range">112–131 bpm</div><div class="z-desc"><strong style="color:var(--blue)">YOUR FOCUS</strong></div><div class="z-bar"><div class="z-fill" style="width:50%;background:var(--blue)"></div></div></div>
+          <div class="z-row"><div class="z-dot" style="background:var(--green)"></div><div class="z-name" style="color:var(--green)">Z3</div><div class="z-range">132–150 bpm</div><div class="z-desc">Tempo</div><div class="z-bar"><div class="z-fill" style="width:65%;background:var(--green)"></div></div></div>
+          <div class="z-row"><div class="z-dot" style="background:var(--orange)"></div><div class="z-name" style="color:var(--orange)">Z4</div><div class="z-range">151–168 bpm</div><div class="z-desc">Race / intervals</div><div class="z-bar"><div class="z-fill" style="width:80%;background:var(--orange)"></div></div></div>
+          <div class="z-row"><div class="z-dot" style="background:var(--red)"></div><div class="z-name" style="color:var(--red)">Z5</div><div class="z-range">169–187 bpm</div><div class="z-desc">Max — short only</div><div class="z-bar"><div class="z-fill" style="width:100%;background:var(--red)"></div></div></div>
+        </div>
+        <div class="card">
+          <div class="ctitle">🎯 Men's Open Race Specs</div>
+          <div style="font-size:.75rem">
+            <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--b1)"><span>1. SkiErg</span><span style="color:var(--accent)">1,000m</span><span style="color:var(--m1)">—</span></div>
+            <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--b1)"><span>2. Sled Push</span><span style="color:var(--accent)">50m</span><span style="color:var(--m1)">102kg</span></div>
+            <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--b1)"><span>3. Sled Pull</span><span style="color:var(--accent)">50m</span><span style="color:var(--m1)">102kg</span></div>
+            <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--b1)"><span>4. Burpee BJ</span><span style="color:var(--accent)">80m</span><span style="color:var(--m1)">BW</span></div>
+            <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--b1)"><span>5. Row</span><span style="color:var(--accent)">1,000m</span><span style="color:var(--m1)">—</span></div>
+            <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--b1)"><span>6. Farmer Carry</span><span style="color:var(--accent)">200m</span><span style="color:var(--m1)">2×24kg</span></div>
+            <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--b1)"><span>7. Sandbag Lunge</span><span style="color:var(--accent)">100m</span><span style="color:var(--m1)">20kg</span></div>
+            <div style="display:flex;justify-content:space-between;padding:6px 0"><span>8. Wall Balls</span><span style="color:var(--accent)">100 reps</span><span style="color:var(--m1)">6kg</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Other plan tabs (rendered by JS) -->
+  <div id="pt-gym" style="display:none"></div>
+  <div id="pt-wl" style="display:none"></div>
+  <div id="pt-stations" style="display:none"></div>
+  <div id="pt-benchmarks" style="display:none">
+    <div class="two-col">
+      <div>
+        <div class="card"><div class="ctitle">Week 4 Checkpoints</div><div class="bench-grid" id="bench4"></div></div>
+        <div class="card"><div class="ctitle">Week 8 Checkpoints</div><div class="bench-grid" id="bench8"></div></div>
+      </div>
+      <div><div class="card"><div class="ctitle">Week 12 Checkpoints</div><div class="bench-grid" id="bench12"></div></div></div>
+    </div>
+  </div>
+  <div id="pt-builder" style="display:none"></div>
+</section>
+
+<!-- ═══════════════════ LOG ═══════════════════ -->
+<section class="screen" id="screen-log">
+  <div class="four-col" id="logStats"></div>
+  <div class="log-form-wrap">
+    <div class="sh" style="margin-bottom:12px"><div class="sh-title">Log <span>Session</span></div><div class="sh-line"></div></div>
+    <div class="lf-row">
+      <div><label class="lfl">Session Type</label>
+        <select class="lfi" id="fType">
+          <option>Zone 2 Run</option><option>Tempo Run</option><option>Long Run</option><option>Interval Run</option>
+          <option>Full Body Strength</option><option>Strength – Lower</option><option>Strength – Upper</option>
+          <option>HYROX Combo</option><option>Full Simulation</option><option>SkiErg</option>
+          <option>Row</option><option>Sled Push</option><option>Sled Pull</option>
+          <option>Burpee Broad Jumps</option><option>Farmer's Carry</option>
+          <option>Sandbag Lunges</option><option>Wall Balls</option>
+          <option>HIIT</option><option>Zone 2 Walk/Bike</option>
+          <option>Active Recovery</option><option>Rest Day</option>
+        </select>
+      </div>
+      <div><label class="lfl">Date</label><input class="lfi" type="date" id="fDate"></div>
+    </div>
+    <div class="lf-row">
+      <div><label class="lfl">Distance (miles)</label><input class="lfi" type="number" id="fDist" placeholder="0.0" step="0.01" min="0"></div>
+      <div><label class="lfl">Duration (min)</label><input class="lfi" type="number" id="fDur" placeholder="0" min="0"></div>
+    </div>
+    <div class="lf-row">
+      <div><label class="lfl">Avg HR (bpm)</label><input class="lfi" type="number" id="fHR" placeholder="0" max="220"></div>
+      <div><label class="lfl">Cadence (spm)</label><input class="lfi" type="number" id="fCad" placeholder="0" max="220"></div>
+    </div>
+    <div class="lf-row">
+      <div><label class="lfl">Effort (1–10)</label><input class="lfi" type="number" id="fEffort" placeholder="7" min="1" max="10"></div>
+      <div><label class="lfl">Body Weight (lb)</label><input class="lfi" type="number" id="fWeight" placeholder="170" step="0.5"></div>
+    </div>
+    <div><label class="lfl">Notes / Station Times</label>
+      <textarea class="lfi" id="fNotes" rows="2" style="width:100%;resize:vertical" placeholder="How did it go? Station splits, PRs, notes…"></textarea>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+      <button class="btn-save" onclick="saveLog()">💾 Save Session</button>
+      <button class="btn-ghost" onclick="exportCSV()">⬇ CSV</button>
+      <button class="btn-ghost" onclick="exportJSON()">⬇ JSON</button>
+    </div>
+  </div>
+  <div class="four-col" id="logStats"></div>
+  <div id="logList"></div>
+</section>
+
+<!-- ═══════════════════ SETTINGS ═══════════════════ -->
+<section class="screen" id="screen-settings">
+  <div class="sh"><div class="sh-title">⚙ <span>Settings & Sync</span></div><div class="sh-line"></div></div>
+  <div class="two-col">
+    <div>
+      <div class="card card-accent">
+        <div class="ctitle">👤 Your Account</div>
+        <div id="settUserPanel" style="margin-bottom:16px">
+          <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--panel);border-radius:var(--rsm);margin-bottom:12px">
+            <div style="width:40px;height:40px;border-radius:50%;background:rgba(232,255,71,.15);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0">💪</div>
+            <div>
+              <div id="settUserName" style="font-weight:700;font-size:.9rem">—</div>
+              <div id="settUserEmail" style="font-size:.72rem;color:var(--m2);margin-top:1px">—</div>
+            </div>
+          </div>
+        </div>
+        <div class="ctitle">☁️ Cloud Sync</div>
+        <p style="font-size:.76rem;color:var(--m2);margin-bottom:12px;line-height:1.65">Your progress is automatically saved to the cloud and syncs across all devices. Sign in on any device to continue your training.</p>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--panel);border-radius:var(--rsm);margin-bottom:12px">
+          <div class="pdot"></div>
+          <div style="flex:1;font-size:.78rem">Sync status: <span class="sync-badge" id="syncBadge2">—</span></div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn-ghost" onclick="syncNow()">↑ Sync Now</button>
+          <button class="btn-ghost" onclick="loadFromGH()">↓ Load Latest</button>
+          <button class="btn-ghost" onclick="signOut()" style="color:var(--red);border-color:rgba(255,61,85,.3)">Sign Out</button>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="ctitle">📅 Program Settings</div>
+        <div style="margin-bottom:12px">
+          <div class="lfl" style="margin-bottom:8px">Active Program</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <button id="progBtn_hyrox"  class="prog-sw-btn prog-btn-active" onclick="setActiveProgram('hyrox');renderSettings()">🏁 HYROX 12-Week</button>
+            <button id="progBtn_gym"    class="prog-sw-btn" onclick="setActiveProgram('gym');renderSettings()">🏋️ Beginner Gym</button>
+            <button id="progBtn_wl"     class="prog-sw-btn" onclick="setActiveProgram('wl');renderSettings()">🔥 Weight Loss</button>
+            <button id="progBtn_custom" class="prog-sw-btn" onclick="setActiveProgram('custom');renderSettings()">🔨 Custom Plan</button>
+          </div>
+          <div style="font-size:.7rem;color:var(--m2);margin-top:8px">Switching updates the Calendar, This Week, and Dashboard to reflect the selected plan.</div>
+        </div>
+        <div style="margin-bottom:10px"><label class="lfl">Program Start Date</label><input class="lfi" type="date" id="sStart"></div>
+        <button class="btn-save" onclick="saveSettings()">Save</button>
+      </div>
+      <div class="card">
+        <div class="ctitle">🌐 About SG Workout</div>
+        <div style="font-size:.76rem;color:var(--m2);line-height:1.8">
+          <strong style="color:var(--text)">SG Workout</strong> by sgavade<br>
+          Version: <strong style="color:var(--text)">3.0</strong> · Backend: <strong style="color:var(--text)">Supabase</strong><br>
+          Your data is encrypted and stored securely in the cloud.<br>
+          Sign in from any browser or device to access your progress.
+        </div>
+      </div>
+      <div class="card">
+        <div class="ctitle">🗄 Data Management</div>
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <button class="btn-ghost" onclick="exportJSON()" style="text-align:left">⬇ Export all data as JSON backup</button>
+          <button class="btn-ghost" onclick="exportCSV()" style="text-align:left">⬇ Export sessions as CSV</button>
+          <button class="btn-ghost" onclick="if(confirm('Reset ALL progress? Cannot be undone.')){D={logs:[],wkDone:{},exNotes:{},benchDone:{},bodyWeight:[],programStart:new Date().toISOString().split('T')[0],settings:{}};saveAll();renderDash();showToast('Reset complete');}" style="text-align:left;color:var(--red)">⚠ Reset all progress</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- LOG MODAL -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal-box">
+    <div class="modal-hdr"><div class="modal-title">Quick Log</div><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div class="lf-row">
+      <div><label class="lfl">Type</label>
+        <select class="lfi" id="mfType">
+          <option>Zone 2 Run</option><option>Tempo Run</option><option>Long Run</option><option>Interval Run</option>
+          <option>Full Body Strength</option><option>Strength – Lower</option><option>Strength – Upper</option>
+          <option>HYROX Combo</option><option>Full Simulation</option><option>SkiErg</option>
+          <option>Row</option><option>HIIT</option><option>Zone 2 Walk/Bike</option>
+          <option>Active Recovery</option><option>Rest Day</option>
+        </select>
+      </div>
+      <div><label class="lfl">Date</label><input class="lfi" type="date" id="mfDate"></div>
+    </div>
+    <div class="lf-row">
+      <div><label class="lfl">Distance (mi)</label><input class="lfi" type="number" id="mfDist" placeholder="0.0" step="0.01"></div>
+      <div><label class="lfl">Duration (min)</label><input class="lfi" type="number" id="mfDur" placeholder="0"></div>
+    </div>
+    <div class="lf-row">
+      <div><label class="lfl">Avg HR</label><input class="lfi" type="number" id="mfHR" placeholder="bpm"></div>
+      <div><label class="lfl">Cadence</label><input class="lfi" type="number" id="mfCad" placeholder="spm"></div>
+    </div>
+    <div class="lf-row">
+      <div><label class="lfl">Effort (1–10)</label><input class="lfi" type="number" id="mfEffort" placeholder="7" min="1" max="10"></div>
+      <div><label class="lfl">Weight (lb)</label><input class="lfi" type="number" id="mfWeight" placeholder="170"></div>
+    </div>
+    <div><label class="lfl">Notes</label><textarea class="lfi" id="mfNotes" rows="2" style="width:100%;resize:vertical"></textarea></div>
+    <button class="btn-save" style="width:100%;margin-top:8px" onclick="saveLog()">💾 Save Session</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-backend.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/render.js"></script>
+<script src="js/builder.js"></script>
+<script>
+// ── Render settings ────────────────────────────────
+function renderSettings(){
+  // Update user panel
+  if (window.CURRENT_USER) {
+    const name  = CURRENT_USER.user_metadata?.full_name || CURRENT_USER.email?.split('@')[0] || 'Athlete';
+    const email = CURRENT_USER.email || '—';
+    const nameEl  = document.getElementById('settUserName');
+    const emailEl = document.getElementById('settUserEmail');
+    if (nameEl)  nameEl.textContent  = name;
+    if (emailEl) emailEl.textContent = email;
+  }
+  // Program start date
+  const sS = document.getElementById('sStart');
+  if(sS) sS.value = D.programStart||'';
+  // Sync all program switcher buttons (header + settings)
+  ['hyrox','gym','wl','custom'].forEach(id=>{
+    document.querySelectorAll('#progBtn_'+id).forEach(b=>{
+      b.classList.toggle('prog-btn-active', D.activeProgram===id);
+    });
+  });
+}
+
+// ── saveSettings (no GitHub, just program date) ────
+async function saveSettings(){
+  const sS=document.getElementById('sStart');
+  if(sS&&sS.value) D.programStart=sS.value;
+  await saveAll();
+  showToast('✅ Settings saved!');
+}
+
+// ── Init nav events ─────────────────────────────────
+document.getElementById('wkPrev').onclick=()=>{if(viewWeek>1){viewWeek--;renderWeek();}};
+document.getElementById('wkNext').onclick=()=>{if(viewWeek<12){viewWeek++;renderWeek();}};
+document.getElementById('calPrev').onclick=()=>{calM--;if(calM<0){calM=11;calY--;}renderCal();};
+document.getElementById('calNext').onclick=()=>{calM++;if(calM>11){calM=0;calY++;}renderCal();};
+document.getElementById('modalBg').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal();});
+
+// Set default dates
+document.getElementById('fDate').value=new Date().toISOString().split('T')[0];
+document.getElementById('mfDate').value=new Date().toISOString().split('T')[0];
+
+// ── Boot (auth check happens inside initApp → Sync.load) ──
+initApp().then(()=>{
+  // Start real-time cross-device sync after app loaded
+  if(window.startRealtimeSync) startRealtimeSync();
+});
+</script>
+</body>
+</html>
