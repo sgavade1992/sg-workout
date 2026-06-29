@@ -20,8 +20,8 @@
 //
 // ═══════════════════════════════════════════════════════
 
-const SUPABASE_URL = 'https://avuemmebwbsnarugsiyc.supabase.co';      // ← replace
-const SUPABASE_KEY = 'sb_publishable_rnWIinum-pOzdHbSjnJSvQ_vHBVUbLR'; // ← replace
+const SUPABASE_URL = 'https://avuemmebwbsnarugsiyc.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_rnWIinum-pOzdHbSjnJSvQ_vHBVUbLR';
 
 // Load Supabase if not already loaded
 const SB = (() => {

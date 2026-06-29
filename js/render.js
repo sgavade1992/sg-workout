@@ -319,7 +319,7 @@ function renderPlanWkDetail(w){
       <div style="flex:1;min-width:0">
         <div style="margin-bottom:3px"><span class="badge ${bclass(day.type)}" style="margin-right:5px">${day.type}</span><span style="font-weight:700;font-size:.82rem">${day.title}</span></div>
         ${day.detail?`<div style="font-size:.69rem;color:var(--m2);margin-bottom:3px;line-height:1.5">${day.detail}</div>`:''}
-        <div style="display:flex;flex-direction:column;gap:1px">${day.exs.map(e=>`<div style="font-size:.67rem;color:var(--m2)">▸ ${e.name}${e.sets!=='1'?' '+e.sets+'×':''} ${e.reps||''}${e.load&&e.load!=='—'?' ('+e.load+')':''}</div>`).join('')}</div>
+        <div style="display:flex;flex-direction:column;gap:1px">${day.exs.map(e=>{const yt=(typeof getYTLink==='function')?getYTLink(e.name):null;return`<div style="font-size:.67rem;color:var(--m2);display:flex;align-items:center;gap:4px">▸ ${e.name}${e.sets!=='1'?' '+e.sets+'×':''} ${e.reps||''}${e.load&&e.load!=='—'?' ('+e.load+')':''}${yt?` <a href="${yt}" target="_blank" rel="noopener" class="yt-btn yt-btn-sm" onclick="event.stopPropagation()">▶</a>`:''}</div>`;}).join('')}</div>
       </div>
       <div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex-shrink:0">
         <button onclick="viewWeek=${w};viewDay=${i};nav('week')" style="font-size:.6rem;color:var(--accent);cursor:pointer;background:none;border:none;white-space:nowrap">Open →</button>

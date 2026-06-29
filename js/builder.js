@@ -222,17 +222,22 @@ function renderLibList() {
   if (q) exs = exs.filter(e => e.name.toLowerCase().includes(q) || e.cat.includes(q) || (e.cues||'').toLowerCase().includes(q));
 
   document.getElementById('libList').innerHTML = exs.length
-    ? exs.map((e, i) => `
-      <div class="lib-ex-card" draggable="true"
-        ondragstart="onLibDragStart(event, '${encodeURIComponent(JSON.stringify(e))}')"
-        ondragend="onDragEnd(event)"
-        onclick="addExToCurrentDay(${encodeURIComponent(JSON.stringify(e))})"
-        title="Click to add to selected day · Drag to a specific slot">
-        <div class="lib-ex-badge ${bclass(e.cat)}">${e.cat.toUpperCase()}</div>
-        <div class="lib-ex-name">${e.name}</div>
-        <div class="lib-ex-meta">${e.sets}×${e.reps}${e.load&&e.load!=='—'?' · '+e.load:''}</div>
-        <div class="lib-ex-drag">⠿</div>
-      </div>`).join('')
+    ? exs.map((e, i) => {
+        const yt = (typeof getYTLink === 'function') ? getYTLink(e.name) : null;
+        return `<div class="lib-ex-card" draggable="true"
+          ondragstart="onLibDragStart(event, '${encodeURIComponent(JSON.stringify(e))}')"
+          ondragend="onDragEnd(event)"
+          onclick="addExToCurrentDay(${encodeURIComponent(JSON.stringify(e))})"
+          title="Click to add to selected day · Drag to a specific slot">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px">
+            <div class="lib-ex-badge ${bclass(e.cat)}">${e.cat.toUpperCase()}</div>
+            ${yt?`<a href="${yt}" target="_blank" rel="noopener" class="yt-btn yt-btn-sm" onclick="event.stopPropagation()" title="Watch demo">▶</a>`:''}
+          </div>
+          <div class="lib-ex-name">${e.name}</div>
+          <div class="lib-ex-meta">${e.sets}×${e.reps}${e.load&&e.load!=='—'?' · '+e.load:''}</div>
+          <div class="lib-ex-drag">⠿</div>
+        </div>`;
+      }).join('')
     : '<div style="text-align:center;color:var(--m1);padding:20px;font-size:.78rem">No exercises match</div>';
 }
 

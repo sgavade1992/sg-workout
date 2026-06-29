@@ -152,11 +152,15 @@ function renderTimerUI(id, total) {
 function exCardHTML(ex, pfx, idx) {
   const k = `${pfx}_${idx}`, done = !!D.wkDone[k], note = D.exNotes['n_'+k]||'';
   const tid = `t_${k}`;
+  const ytLink = (typeof getYTLink === 'function') ? getYTLink(ex.name) : null;
   return `<div class="ex-card${done?' done':''}" id="ec_${k}">
     <div class="ex-card-row">
       <div class="ex-chk" onclick="togEx('${k}')">${done?'✓':''}</div>
       <div class="ex-body">
-        <div class="ex-name">${ex.name}${ex.isCardio?'<span class="cardio-pill">cardio</span>':''}</div>
+        <div class="ex-name-row">
+          <span class="ex-name">${ex.name}${ex.isCardio?'<span class="cardio-pill">cardio</span>':''}</span>
+          ${ytLink?`<a href="${ytLink}" target="_blank" rel="noopener" class="yt-btn" title="Watch demo on YouTube">▶ Demo</a>`:''}
+        </div>
         <div class="ex-meta">
           ${ex.sets&&ex.sets!=='1'?`<span><strong>${ex.sets}</strong> sets</span>`:''}
           ${ex.reps?`<span><strong>${ex.reps}</strong></span>`:''}

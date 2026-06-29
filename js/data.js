@@ -774,3 +774,128 @@ function buildGymFlat() {
 
 const WL_PLAN_FLAT  = buildWLFlat();
 const GYM_PLAN_FLAT = buildGymFlat();
+
+// ═══════════════════════════════════════════════════════
+// YOUTUBE DEMO LINKS — curated search links per exercise
+// Opens YouTube search so user finds best current video
+// ═══════════════════════════════════════════════════════
+const YT_BASE = 'https://www.youtube.com/results?search_query=how+to+';
+
+const EXERCISE_YT = {
+  // HYROX Stations
+  'SkiErg':                'https://www.youtube.com/results?search_query=hyrox+skierg+technique+tutorial',
+  'Sled Push':             'https://www.youtube.com/results?search_query=hyrox+sled+push+technique',
+  'Sled Pull':             'https://www.youtube.com/results?search_query=hyrox+sled+pull+technique',
+  'Burpee Broad Jumps':    'https://www.youtube.com/results?search_query=hyrox+burpee+broad+jump+technique',
+  'Row':                   'https://www.youtube.com/results?search_query=rowing+machine+technique+beginner',
+  "Farmer's Carry":        'https://www.youtube.com/results?search_query=farmers+carry+technique+form',
+  'Sandbag Lunge':         'https://www.youtube.com/results?search_query=sandbag+lunge+technique+hyrox',
+  'Wall Balls':            'https://www.youtube.com/results?search_query=wall+ball+technique+crossfit',
+  // Lower Body
+  'Back Squat':            'https://www.youtube.com/results?search_query=barbell+back+squat+form+tutorial',
+  'Romanian Deadlift':     'https://www.youtube.com/results?search_query=romanian+deadlift+form+tutorial',
+  'Bulgarian Split Squat': 'https://www.youtube.com/results?search_query=bulgarian+split+squat+form+tutorial',
+  'Leg Press':             'https://www.youtube.com/results?search_query=leg+press+machine+form+tutorial',
+  'Hip Thrust':            'https://www.youtube.com/results?search_query=barbell+hip+thrust+form+tutorial',
+  'Walking Lunge':         'https://www.youtube.com/results?search_query=walking+lunge+form+tutorial',
+  'Step-Up':               'https://www.youtube.com/results?search_query=dumbbell+step+up+form+tutorial',
+  'Leg Curl':              'https://www.youtube.com/results?search_query=leg+curl+machine+form+tutorial',
+  'Calf Raise':            'https://www.youtube.com/results?search_query=calf+raise+form+tutorial',
+  'Goblet Squat':          'https://www.youtube.com/results?search_query=goblet+squat+form+tutorial',
+  'Deadlift':              'https://www.youtube.com/results?search_query=conventional+deadlift+form+tutorial',
+  'Glute Bridge':          'https://www.youtube.com/results?search_query=glute+bridge+form+tutorial',
+  'Reverse Lunge':         'https://www.youtube.com/results?search_query=reverse+lunge+form+tutorial',
+  // Push
+  'Barbell Bench Press':   'https://www.youtube.com/results?search_query=barbell+bench+press+form+tutorial',
+  'Incline DB Press':      'https://www.youtube.com/results?search_query=incline+dumbbell+press+form+tutorial',
+  'Overhead Press':        'https://www.youtube.com/results?search_query=barbell+overhead+press+form+tutorial',
+  'DB Overhead Press':     'https://www.youtube.com/results?search_query=dumbbell+overhead+press+form+tutorial',
+  'Push-Up':               'https://www.youtube.com/results?search_query=push+up+perfect+form+tutorial',
+  'Cable Chest Fly':       'https://www.youtube.com/results?search_query=cable+chest+fly+form+tutorial',
+  'Dips':                  'https://www.youtube.com/results?search_query=chest+dips+form+tutorial',
+  'Lateral Raise':         'https://www.youtube.com/results?search_query=lateral+raise+form+tutorial',
+  'Tricep Pushdown':       'https://www.youtube.com/results?search_query=tricep+pushdown+form+tutorial',
+  'Tricep Dip':            'https://www.youtube.com/results?search_query=tricep+dip+bench+form+tutorial',
+  // Pull
+  'Pull-Up':               'https://www.youtube.com/results?search_query=pull+up+form+tutorial+beginner',
+  'Pull-Up or Lat Pulldown': 'https://www.youtube.com/results?search_query=lat+pulldown+form+tutorial',
+  'Lat Pulldown':          'https://www.youtube.com/results?search_query=lat+pulldown+form+tutorial',
+  'Barbell Row':           'https://www.youtube.com/results?search_query=barbell+row+form+tutorial',
+  'Bent-Over Row':         'https://www.youtube.com/results?search_query=barbell+row+form+tutorial',
+  'Bent-Over Barbell Row': 'https://www.youtube.com/results?search_query=barbell+row+form+tutorial',
+  'Bent-Over DB Row':      'https://www.youtube.com/results?search_query=dumbbell+row+form+tutorial',
+  'Seated Cable Row':      'https://www.youtube.com/results?search_query=seated+cable+row+form+tutorial',
+  'DB Row (single arm)':   'https://www.youtube.com/results?search_query=single+arm+dumbbell+row+form+tutorial',
+  'Cable Row':             'https://www.youtube.com/results?search_query=cable+row+form+tutorial',
+  'Face Pull':             'https://www.youtube.com/results?search_query=face+pull+cable+form+tutorial',
+  'Dead Hang':             'https://www.youtube.com/results?search_query=dead+hang+bar+grip+strength',
+  'Bicep Curl':            'https://www.youtube.com/results?search_query=bicep+curl+form+tutorial',
+  'Hammer Curl':           'https://www.youtube.com/results?search_query=hammer+curl+form+tutorial',
+  'Chest-Supported Row':   'https://www.youtube.com/results?search_query=chest+supported+row+form+tutorial',
+  // Core
+  'Plank Hold':            'https://www.youtube.com/results?search_query=plank+form+tutorial+core',
+  'Dead Bug':              'https://www.youtube.com/results?search_query=dead+bug+exercise+form+tutorial',
+  'Side Plank':            'https://www.youtube.com/results?search_query=side+plank+form+tutorial',
+  'Ab Wheel Rollout':      'https://www.youtube.com/results?search_query=ab+wheel+rollout+form+tutorial',
+  'Hanging Leg Raise':     'https://www.youtube.com/results?search_query=hanging+leg+raise+form+tutorial',
+  'Russian Twist':         'https://www.youtube.com/results?search_query=russian+twist+form+tutorial',
+  'Bicycle Crunch':        'https://www.youtube.com/results?search_query=bicycle+crunch+form+tutorial',
+  'Cable Crunch':          'https://www.youtube.com/results?search_query=cable+crunch+abs+form+tutorial',
+  'Pallof Press':          'https://www.youtube.com/results?search_query=pallof+press+core+form+tutorial',
+  'Superman Hold':         'https://www.youtube.com/results?search_query=superman+hold+exercise+form+tutorial',
+  // Olympic & Power
+  'Power Clean':           'https://www.youtube.com/results?search_query=power+clean+form+tutorial+beginner',
+  'Hang Clean':            'https://www.youtube.com/results?search_query=hang+clean+form+tutorial',
+  'Box Jump':              'https://www.youtube.com/results?search_query=box+jump+form+tutorial',
+  'Broad Jump':            'https://www.youtube.com/results?search_query=broad+jump+technique+tutorial',
+  'Kettlebell Swing':      'https://www.youtube.com/results?search_query=kettlebell+swing+form+tutorial',
+  'Kettlebell Snatch':     'https://www.youtube.com/results?search_query=kettlebell+snatch+form+tutorial',
+  'Thruster':              'https://www.youtube.com/results?search_query=barbell+thruster+form+tutorial',
+  'Clean & Press':         'https://www.youtube.com/results?search_query=clean+and+press+form+tutorial',
+  // Mobility
+  'Hip Flexor Stretch':    'https://www.youtube.com/results?search_query=hip+flexor+stretch+tutorial',
+  'Pigeon Pose':           'https://www.youtube.com/results?search_query=pigeon+pose+hip+stretch+tutorial',
+  'Foam Roll Quads':       'https://www.youtube.com/results?search_query=foam+rolling+quads+technique',
+  'Thoracic Rotation':     'https://www.youtube.com/results?search_query=thoracic+rotation+mobility+exercise',
+  'Calf Stretch':          'https://www.youtube.com/results?search_query=calf+stretch+tutorial',
+  'Foam Roll Full Body':   'https://www.youtube.com/results?search_query=foam+rolling+full+body+tutorial',
+  'Foam Roll Calves':      'https://www.youtube.com/results?search_query=foam+rolling+calves+technique',
+  // Running
+  'Zone 2 Run':            'https://www.youtube.com/results?search_query=zone+2+running+heart+rate+training',
+  'Tempo Run':             'https://www.youtube.com/results?search_query=tempo+run+training+guide',
+  'Interval Run':          'https://www.youtube.com/results?search_query=interval+running+training+tutorial',
+  'Long Run':              'https://www.youtube.com/results?search_query=long+run+training+tips+running',
+  'HIIT Sprints':          'https://www.youtube.com/results?search_query=hiit+sprint+training+workout',
+  'High Knees':            'https://www.youtube.com/results?search_query=high+knees+exercise+form+tutorial',
+  'Butt Kicks':            'https://www.youtube.com/results?search_query=butt+kicks+running+drill+tutorial',
+  'A-Skip':                'https://www.youtube.com/results?search_query=a+skip+running+drill+tutorial',
+  'Strides':               'https://www.youtube.com/results?search_query=running+strides+technique+tutorial',
+  'Carioca':               'https://www.youtube.com/results?search_query=carioca+drill+agility+tutorial',
+  'Row 1,000m Easy':       'https://www.youtube.com/results?search_query=rowing+machine+technique+beginner',
+  'Row 1,200m Easy':       'https://www.youtube.com/results?search_query=rowing+machine+technique+beginner',
+  'Row 1,000m BENCHMARK':  'https://www.youtube.com/results?search_query=rowing+machine+technique+beginner',
+  // Generic fallback builder library
+  'Jump Rope':             'https://www.youtube.com/results?search_query=jump+rope+technique+tutorial',
+  'Stair Climber':         'https://www.youtube.com/results?search_query=stair+climber+machine+workout+tutorial',
+  'Assault Bike':          'https://www.youtube.com/results?search_query=assault+bike+workout+technique',
+  'Treadmill Walk':        'https://www.youtube.com/results?search_query=treadmill+incline+walking+workout',
+  'HYROX Combo':           'https://www.youtube.com/results?search_query=hyrox+race+simulation+training',
+  'Power Clean':           'https://www.youtube.com/results?search_query=power+clean+form+tutorial+beginner',
+  "World's Greatest Stretch": 'https://www.youtube.com/results?search_query=worlds+greatest+stretch+tutorial',
+  'Downward Dog':          'https://www.youtube.com/results?search_query=downward+dog+yoga+tutorial',
+  'Ankle Mobility':        'https://www.youtube.com/results?search_query=ankle+mobility+exercises+tutorial',
+  '90-90 Hip Stretch':     'https://www.youtube.com/results?search_query=90+90+hip+stretch+tutorial',
+  'Glute Stretch':         'https://www.youtube.com/results?search_query=glute+stretch+tutorial+figure+four',
+};
+
+// Helper to get YT link for any exercise name
+function getYTLink(name) {
+  if (!name) return null;
+  // Exact match first
+  if (EXERCISE_YT[name]) return EXERCISE_YT[name];
+  // Partial match
+  const key = Object.keys(EXERCISE_YT).find(k => name.toLowerCase().includes(k.toLowerCase()) || k.toLowerCase().includes(name.toLowerCase()));
+  if (key) return EXERCISE_YT[key];
+  // Generic fallback
+  return `https://www.youtube.com/results?search_query=${encodeURIComponent(name + ' exercise form tutorial')}`;
+}
