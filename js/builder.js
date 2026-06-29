@@ -1,119 +1,115 @@
 // ═══════════════════════════════════════════════════════
-// CUSTOM WORKOUT BUILDER — drag & drop to any day
-// Saves to D.customPlan, reflected in calendar + checklist
+// CUSTOM WORKOUT BUILDER — Checklist-based (mobile friendly)
 // ═══════════════════════════════════════════════════════
 
 // ── EXERCISE LIBRARY ───────────────────────────────────
 const EXERCISE_LIBRARY = {
   'Running & Cardio': [
-    {name:'Zone 2 Run',          cat:'run',    sets:'1', reps:'20–30 min', load:'—',    cues:'HR 112–131 bpm. Conversational pace. Fat-burning zone.',      timer:1200, isCardio:true},
-    {name:'Tempo Run',           cat:'run',    sets:'1', reps:'15–20 min', load:'—',    cues:'HR 145–155 bpm. Comfortably hard — 1–2 words between breaths.',timer:900,  isCardio:true},
-    {name:'Interval Run',        cat:'run',    sets:'6', reps:'400m',      load:'—',    cues:'Hard effort. Walk/jog 90 sec rest between.',                  timer:120,  isCardio:true},
-    {name:'Long Run',            cat:'run',    sets:'1', reps:'45–60 min', load:'—',    cues:'Zone 2 the entire time. Aerobic base building.',              timer:2700, isCardio:true},
-    {name:'HIIT Sprints',        cat:'run',    sets:'8', reps:'30 sec on/30 off',load:'—',cues:'All-out effort on, complete rest off.',                     timer:30,   isCardio:true},
-    {name:'Treadmill Walk',      cat:'run',    sets:'1', reps:'30 min',    load:'—',    cues:'Incline 5–8%. Zone 1–2.',                                    timer:1800, isCardio:true},
-    {name:'Row Ergometer',       cat:'run',    sets:'1', reps:'1,000m',    load:'—',    cues:'Legs-back-arms sequence. Record time.',                       timer:300,  isCardio:true},
-    {name:'Assault Bike',        cat:'run',    sets:'1', reps:'20 min',    load:'—',    cues:'Zone 2 or HIIT intervals.',                                   timer:1200, isCardio:true},
-    {name:'Jump Rope',           cat:'run',    sets:'3', reps:'3 min',     load:'—',    cues:'Steady pace. 1 min rest between.',                           timer:180,  isCardio:true},
-    {name:'Stair Climber',       cat:'run',    sets:'1', reps:'20 min',    load:'—',    cues:'Steady zone 2 effort.',                                      timer:1200, isCardio:true},
+    {name:'Zone 2 Run',           cat:'run',   sets:'1', reps:'20–30 min',      load:'—',       cues:'HR 112–131 bpm. Conversational pace.',         timer:1200,isCardio:true},
+    {name:'Tempo Run',            cat:'run',   sets:'1', reps:'15–20 min',      load:'—',       cues:'HR 145–155 bpm. Comfortably hard.',            timer:900, isCardio:true},
+    {name:'Interval Run',         cat:'run',   sets:'6', reps:'400m',           load:'—',       cues:'Hard effort. 90 sec jog rest between.',        timer:120, isCardio:true},
+    {name:'Long Run',             cat:'run',   sets:'1', reps:'45–60 min',      load:'—',       cues:'Zone 2 the entire time.',                      timer:2700,isCardio:true},
+    {name:'HIIT Sprints',         cat:'run',   sets:'8', reps:'30 sec on/30 off',load:'—',      cues:'All-out effort on, complete rest off.',         timer:30,  isCardio:true},
+    {name:'Treadmill Walk',       cat:'run',   sets:'1', reps:'30 min',         load:'—',       cues:'Incline 5–8%. Zone 1–2.',                      timer:1800,isCardio:true},
+    {name:'Row Ergometer',        cat:'run',   sets:'1', reps:'1,000m',         load:'—',       cues:'Legs-back-arms. Record time.',                 timer:300, isCardio:true},
+    {name:'Assault Bike',         cat:'run',   sets:'1', reps:'20 min',         load:'—',       cues:'Zone 2 or HIIT intervals.',                    timer:1200,isCardio:true},
+    {name:'Jump Rope',            cat:'run',   sets:'3', reps:'3 min',          load:'—',       cues:'Steady pace. 1 min rest.',                     timer:180, isCardio:true},
+    {name:'Stair Climber',        cat:'run',   sets:'1', reps:'20 min',         load:'—',       cues:'Steady zone 2 effort.',                        timer:1200,isCardio:true},
   ],
   'HYROX Stations': [
-    {name:'SkiErg',              cat:'hyrox',  sets:'3', reps:'500m',      load:'—',    cues:'Hip hinge drive. Record each split.',                         timer:90,   isCardio:true},
-    {name:'Sled Push',           cat:'hyrox',  sets:'4', reps:'25m',       load:'102kg',cues:'Hips low, drive with legs. Short powerful strides.',          timer:60},
-    {name:'Sled Pull',           cat:'hyrox',  sets:'4', reps:'25m',       load:'102kg',cues:'Hand-over-hand. Keep rope taut.',                             timer:60},
-    {name:'Burpee Broad Jumps',  cat:'hyrox',  sets:'3', reps:'10 reps',   load:'BW',   cues:'Rhythmic and controlled. Chest to floor each rep.',           timer:60},
-    {name:'Sandbag Lunge',       cat:'hyrox',  sets:'3', reps:'20m',       load:'20kg', cues:'Full stride, sandbag on shoulders behind neck.',              timer:90},
-    {name:"Farmer's Carry",      cat:'hyrox',  sets:'4', reps:'50m',       load:'2×24kg',cues:'Walk tall, core braced, grip firm.',                        timer:60},
-    {name:'Wall Balls',          cat:'hyrox',  sets:'3', reps:'20 reps',   load:'6kg',  cues:'Squat deep, explode up, hit 3m target.',                     timer:75},
-    {name:'HYROX Combo',         cat:'hyrox',  sets:'2', reps:'1 full round',load:'—',  cues:'Run 400m between each station.',                             timer:600},
+    {name:'SkiErg',               cat:'hyrox', sets:'3', reps:'500m',           load:'—',       cues:'Hip hinge drive. Record each split.',          timer:90,  isCardio:true},
+    {name:'Sled Push',            cat:'hyrox', sets:'4', reps:'25m',            load:'102kg',   cues:'Hips low, drive with legs.',                   timer:60},
+    {name:'Sled Pull',            cat:'hyrox', sets:'4', reps:'25m',            load:'102kg',   cues:'Hand-over-hand. Keep rope taut.',              timer:60},
+    {name:'Burpee Broad Jumps',   cat:'hyrox', sets:'3', reps:'10 reps',        load:'BW',      cues:'Rhythmic, chest to floor each rep.',           timer:60},
+    {name:'Sandbag Lunge',        cat:'hyrox', sets:'3', reps:'20m',            load:'20kg',    cues:'Full stride, sandbag on shoulders.',           timer:90},
+    {name:"Farmer's Carry",       cat:'hyrox', sets:'4', reps:'50m',            load:'2×24kg',  cues:'Walk tall, core braced, grip firm.',           timer:60},
+    {name:'Wall Balls',           cat:'hyrox', sets:'3', reps:'20 reps',        load:'6kg',     cues:'Squat deep, explode up, hit 3m target.',      timer:75},
+    {name:'HYROX Combo',          cat:'hyrox', sets:'2', reps:'1 full round',   load:'—',       cues:'Run 400m between each station.',               timer:600},
   ],
   'Legs & Glutes': [
-    {name:'Back Squat',          cat:'str',    sets:'4', reps:'8',         load:'Heavy',cues:'Full depth, brace core, drive through heels.',               timer:120},
-    {name:'Romanian Deadlift',   cat:'str',    sets:'4', reps:'10',        load:'Moderate',cues:'Hip hinge, feel hamstring stretch. Bar close to legs.',    timer:90},
-    {name:'Bulgarian Split Squat',cat:'str',   sets:'3', reps:'8 each',    load:'DBs',  cues:'Rear foot elevated. Drive through front heel.',              timer:90},
-    {name:'Leg Press',           cat:'str',    sets:'3', reps:'12',        load:'Heavy',cues:'Full ROM, don\'t lock knees.',                               timer:75},
-    {name:'Hip Thrust',          cat:'str',    sets:'4', reps:'12',        load:'Barbell',cues:'Shoulder blades on bench. Squeeze glutes at top.',         timer:75},
-    {name:'Walking Lunge',       cat:'str',    sets:'3', reps:'10 each',   load:'DBs',  cues:'Full stride, upright torso.',                               timer:75},
-    {name:'Step-Up',             cat:'str',    sets:'3', reps:'10 each',   load:'DBs',  cues:'Drive through front heel only.',                             timer:60},
-    {name:'Leg Curl',            cat:'str',    sets:'3', reps:'12',        load:'Machine',cues:'Controlled eccentric, full extension.',                   timer:60},
-    {name:'Calf Raise',          cat:'str',    sets:'4', reps:'15',        load:'Moderate',cues:'Full ROM. 3 sec eccentric.',                             timer:45},
-    {name:'Goblet Squat',        cat:'str',    sets:'3', reps:'15',        load:'KB',   cues:'Elbows inside knees. Chest up.',                            timer:60},
-    {name:'Deadlift',            cat:'str',    sets:'4', reps:'5',         load:'Heavy',cues:'Drive the floor away. Flat back.',                          timer:120},
-    {name:'Glute Bridge',        cat:'str',    sets:'3', reps:'15',        load:'BW/plate',cues:'Drive hips to ceiling, 1 sec hold.',                    timer:60},
+    {name:'Back Squat',           cat:'str',   sets:'4', reps:'8',              load:'Heavy',   cues:'Full depth, brace core, drive through heels.',timer:120},
+    {name:'Romanian Deadlift',    cat:'str',   sets:'4', reps:'10',             load:'Moderate',cues:'Hip hinge, feel hamstring stretch.',           timer:90},
+    {name:'Bulgarian Split Squat',cat:'str',   sets:'3', reps:'8 each',         load:'DBs',     cues:'Rear foot elevated. Front heel drive.',       timer:90},
+    {name:'Leg Press',            cat:'str',   sets:'3', reps:'12',             load:'Heavy',   cues:"Full ROM, don't lock knees.",                 timer:75},
+    {name:'Hip Thrust',           cat:'str',   sets:'4', reps:'12',             load:'Barbell', cues:'Shoulder blades on bench. Squeeze glutes.',   timer:75},
+    {name:'Walking Lunge',        cat:'str',   sets:'3', reps:'10 each',        load:'DBs',     cues:'Full stride, upright torso.',                 timer:75},
+    {name:'Step-Up',              cat:'str',   sets:'3', reps:'10 each',        load:'DBs',     cues:'Drive through front heel only.',               timer:60},
+    {name:'Leg Curl',             cat:'str',   sets:'3', reps:'12',             load:'Machine', cues:'Controlled eccentric, full extension.',       timer:60},
+    {name:'Calf Raise',           cat:'str',   sets:'4', reps:'15',             load:'Moderate',cues:'Full ROM. 3 sec eccentric.',                  timer:45},
+    {name:'Goblet Squat',         cat:'str',   sets:'3', reps:'15',             load:'KB',      cues:'Elbows inside knees. Chest up.',               timer:60},
+    {name:'Deadlift',             cat:'str',   sets:'4', reps:'5',              load:'Heavy',   cues:'Drive the floor away. Flat back.',             timer:120},
+    {name:'Glute Bridge',         cat:'str',   sets:'3', reps:'15',             load:'BW/plate',cues:'Drive hips up, 1 sec hold.',                  timer:60},
+    {name:'Reverse Lunge',        cat:'str',   sets:'3', reps:'10 each',        load:'DBs',     cues:'Control the descent.',                        timer:60},
   ],
   'Push (Chest / Shoulders / Triceps)': [
-    {name:'Barbell Bench Press', cat:'str',    sets:'4', reps:'8',         load:'Heavy',cues:'Elbows 45°, touch chest, full extension.',                  timer:90},
-    {name:'Incline DB Press',    cat:'str',    sets:'3', reps:'10',        load:'Moderate',cues:'45° bench, slow descent.',                               timer:75},
-    {name:'Overhead Press',      cat:'str',    sets:'4', reps:'8',         load:'Barbell',cues:'Core tight, bar in front, press straight up.',            timer:90},
-    {name:'DB Overhead Press',   cat:'str',    sets:'3', reps:'10',        load:'DBs',  cues:'Neutral grip option available.',                            timer:75},
-    {name:'Push-Up',             cat:'str',    sets:'3', reps:'15–20',     load:'BW',   cues:'Full plank, chest to floor, elbows 45°.',                  timer:60},
-    {name:'Cable Chest Fly',     cat:'str',    sets:'3', reps:'12',        load:'Light',cues:'Wide arc, slight bend in elbows.',                         timer:60},
-    {name:'Dips',                cat:'str',    sets:'3', reps:'10',        load:'BW',   cues:'Slight forward lean for chest focus.',                     timer:75},
-    {name:'Lateral Raise',       cat:'str',    sets:'3', reps:'15',        load:'Light DBs',cues:'Slight bend in elbow. Lead with elbow.',               timer:45},
-    {name:'Tricep Pushdown',     cat:'str',    sets:'3', reps:'15',        load:'Cable',cues:'Elbows locked at sides.',                                  timer:45},
-    {name:'Tricep Dip',          cat:'str',    sets:'3', reps:'12',        load:'BW',   cues:'Full extension at bottom.',                                timer:60},
+    {name:'Barbell Bench Press',  cat:'str',   sets:'4', reps:'8',              load:'Heavy',   cues:'Elbows 45°, touch chest, full extension.',    timer:90},
+    {name:'Incline DB Press',     cat:'str',   sets:'3', reps:'10',             load:'Moderate',cues:'45° bench, slow descent.',                    timer:75},
+    {name:'Overhead Press',       cat:'str',   sets:'4', reps:'8',              load:'Barbell', cues:'Core tight, press straight up.',               timer:90},
+    {name:'DB Overhead Press',    cat:'str',   sets:'3', reps:'10',             load:'DBs',     cues:'Neutral grip option available.',               timer:75},
+    {name:'Push-Up',              cat:'str',   sets:'3', reps:'15–20',          load:'BW',      cues:'Full plank, chest to floor, elbows 45°.',     timer:60},
+    {name:'Cable Chest Fly',      cat:'str',   sets:'3', reps:'12',             load:'Light',   cues:'Wide arc, slight bend in elbows.',             timer:60},
+    {name:'Dips',                 cat:'str',   sets:'3', reps:'10',             load:'BW',      cues:'Slight forward lean for chest focus.',        timer:75},
+    {name:'Lateral Raise',        cat:'str',   sets:'3', reps:'15',             load:'Light DBs',cues:'Slight bend in elbow. Lead with elbow.',    timer:45},
+    {name:'Tricep Pushdown',      cat:'str',   sets:'3', reps:'15',             load:'Cable',   cues:'Elbows locked at sides.',                      timer:45},
+    {name:'Tricep Dip',           cat:'str',   sets:'3', reps:'12',             load:'BW',      cues:'Full extension at bottom.',                   timer:60},
   ],
   'Pull (Back / Biceps)': [
-    {name:'Pull-Up',             cat:'str',    sets:'4', reps:'8',         load:'BW',   cues:'Full hang start, chin over bar, control the descent.',      timer:90},
-    {name:'Lat Pulldown',        cat:'str',    sets:'4', reps:'12',        load:'Moderate',cues:'Pull elbows to hips. Slow return.',                     timer:75},
-    {name:'Barbell Row',         cat:'str',    sets:'4', reps:'8',         load:'Heavy',cues:'Hinged over, elbows back, bar to lower chest.',            timer:90},
-    {name:'Seated Cable Row',    cat:'str',    sets:'3', reps:'12',        load:'Moderate',cues:'Full retraction. Sit tall.',                            timer:60},
-    {name:'DB Row (single arm)', cat:'str',    sets:'3', reps:'10 each',   load:'Heavy DB',cues:'Knee on bench, elbow to ceiling.',                     timer:75},
-    {name:'Face Pull',           cat:'str',    sets:'3', reps:'15',        load:'Light cable',cues:'Elbows high, external rotation at end.',             timer:45},
-    {name:'Dead Hang',           cat:'str',    sets:'3', reps:'Max time',  load:'BW',   cues:'Build grip for sled pull.',                               timer:30},
-    {name:'Bicep Curl',          cat:'str',    sets:'3', reps:'12',        load:'DBs',  cues:'Full extension at bottom.',                               timer:45},
-    {name:'Hammer Curl',         cat:'str',    sets:'3', reps:'12',        load:'DBs',  cues:'Neutral grip, controlled.',                               timer:45},
-    {name:'Chest-Supported Row', cat:'str',    sets:'3', reps:'12',        load:'DBs',  cues:'Chest on incline bench. Eliminates cheat.',               timer:60},
+    {name:'Pull-Up',              cat:'str',   sets:'4', reps:'8',              load:'BW',      cues:'Full hang, chin over bar, control descent.',  timer:90},
+    {name:'Lat Pulldown',         cat:'str',   sets:'4', reps:'12',             load:'Moderate',cues:'Pull elbows to hips. Slow return.',           timer:75},
+    {name:'Barbell Row',          cat:'str',   sets:'4', reps:'8',              load:'Heavy',   cues:'Hinged over, elbows back.',                   timer:90},
+    {name:'Seated Cable Row',     cat:'str',   sets:'3', reps:'12',             load:'Moderate',cues:'Full retraction. Sit tall.',                  timer:60},
+    {name:'DB Row (single arm)',  cat:'str',   sets:'3', reps:'10 each',        load:'Heavy DB',cues:'Knee on bench, elbow to ceiling.',            timer:75},
+    {name:'Face Pull',            cat:'str',   sets:'3', reps:'15',             load:'Light cable',cues:'Elbows high, external rotation.',          timer:45},
+    {name:'Dead Hang',            cat:'str',   sets:'3', reps:'Max time',       load:'BW',      cues:'Build grip for sled pull.',                   timer:30},
+    {name:'Bicep Curl',           cat:'str',   sets:'3', reps:'12',             load:'DBs',     cues:'Full extension at bottom.',                   timer:45},
+    {name:'Hammer Curl',          cat:'str',   sets:'3', reps:'12',             load:'DBs',     cues:'Neutral grip, controlled.',                   timer:45},
+    {name:'Chest-Supported Row',  cat:'str',   sets:'3', reps:'12',             load:'DBs',     cues:'Chest on incline bench. Eliminates cheat.',   timer:60},
   ],
   'Core & Abs': [
-    {name:'Plank Hold',          cat:'str',    sets:'3', reps:'45–60 sec', load:'BW',   cues:'Neutral spine, squeeze glutes, breathe.',                 timer:45},
-    {name:'Dead Bug',            cat:'str',    sets:'3', reps:'10',        load:'BW',   cues:'Press lower back into floor throughout.',                 timer:45},
-    {name:'Side Plank',          cat:'str',    sets:'2', reps:'30 sec each',load:'BW',  cues:'Hips forward, body in straight line.',                   timer:30},
-    {name:'Ab Wheel Rollout',    cat:'str',    sets:'3', reps:'8–10',      load:'BW',   cues:'Brace hard. Don\'t let back sag.',                       timer:60},
-    {name:'Hanging Leg Raise',   cat:'str',    sets:'3', reps:'12',        load:'BW',   cues:'Controlled. No swinging.',                               timer:60},
-    {name:'Russian Twist',       cat:'str',    sets:'3', reps:'20',        load:'Plate/ball',cues:'Feet off floor for harder version.',                timer:45},
-    {name:'Bicycle Crunch',      cat:'str',    sets:'3', reps:'20',        load:'BW',   cues:'Opposite elbow to knee. Controlled.',                    timer:45},
-    {name:'Cable Crunch',        cat:'str',    sets:'3', reps:'15',        load:'Light cable',cues:'Crunch down, feel abs contract.',                  timer:45},
-    {name:'Pallof Press',        cat:'str',    sets:'3', reps:'12 each',   load:'Cable',cues:'Anti-rotation core stability.',                          timer:45},
-    {name:'Superman Hold',       cat:'str',    sets:'3', reps:'10',        load:'BW',   cues:'Squeeze glutes, hold 2 sec at top.',                     timer:30},
+    {name:'Plank Hold',           cat:'str',   sets:'3', reps:'45–60 sec',      load:'BW',      cues:'Neutral spine, squeeze glutes, breathe.',     timer:45},
+    {name:'Dead Bug',             cat:'str',   sets:'3', reps:'10',             load:'BW',      cues:'Press lower back into floor throughout.',     timer:45},
+    {name:'Side Plank',           cat:'str',   sets:'2', reps:'30 sec each',    load:'BW',      cues:'Hips forward, body in straight line.',        timer:30},
+    {name:'Ab Wheel Rollout',     cat:'str',   sets:'3', reps:'8–10',           load:'BW',      cues:"Brace hard. Don't let back sag.",             timer:60},
+    {name:'Hanging Leg Raise',    cat:'str',   sets:'3', reps:'12',             load:'BW',      cues:'Controlled. No swinging.',                    timer:60},
+    {name:'Russian Twist',        cat:'str',   sets:'3', reps:'20',             load:'Plate/ball',cues:'Feet off floor for harder version.',        timer:45},
+    {name:'Bicycle Crunch',       cat:'str',   sets:'3', reps:'20',             load:'BW',      cues:'Opposite elbow to knee. Controlled.',        timer:45},
+    {name:'Cable Crunch',         cat:'str',   sets:'3', reps:'15',             load:'Light cable',cues:'Crunch down, feel abs contract.',          timer:45},
+    {name:'Pallof Press',         cat:'str',   sets:'3', reps:'12 each',        load:'Cable',   cues:'Anti-rotation core stability.',               timer:45},
+    {name:'Superman Hold',        cat:'str',   sets:'3', reps:'10',             load:'BW',      cues:'Squeeze glutes, hold 2 sec at top.',          timer:30},
   ],
   'Mobility & Recovery': [
-    {name:'Hip Flexor Stretch',  cat:'rest',   sets:'2', reps:'60 sec each',load:'—',   cues:'Lunge position, tuck pelvis forward.',                   timer:60},
-    {name:'Pigeon Pose',         cat:'rest',   sets:'2', reps:'60 sec each',load:'—',   cues:'Hips square. Breathe into the stretch.',                 timer:60},
-    {name:'Foam Roll Quads',     cat:'rest',   sets:'1', reps:'90 sec each',load:'—',   cues:'Slow rolls. Pause on tight spots.',                      timer:90},
-    {name:'Thoracic Rotation',   cat:'rest',   sets:'2', reps:'10 each',   load:'—',    cues:'Seated. Rotate fully, hold 2 sec.',                      timer:30},
-    {name:'Calf Stretch',        cat:'rest',   sets:'2', reps:'45 sec each',load:'—',   cues:'Straight leg against wall.',                             timer:45},
-    {name:'Glute Stretch',       cat:'rest',   sets:'2', reps:'45 sec each',load:'—',   cues:'Figure-4 stretch.',                                      timer:45},
-    {name:'90-90 Hip Stretch',   cat:'rest',   sets:'2', reps:'60 sec each',load:'—',   cues:'Both knees at 90°. Sit tall.',                           timer:60},
-    {name:'Ankle Mobility',      cat:'rest',   sets:'2', reps:'10 circles',load:'—',    cues:'Full ROM ankle circles each direction.',                  timer:20},
-    {name:'World\'s Greatest Stretch',cat:'rest',sets:'2',reps:'5 each',  load:'—',    cues:'Lunge + rotation + reach. Best single drill.',           timer:30},
-    {name:'Downward Dog',        cat:'rest',   sets:'3', reps:'30 sec',    load:'—',    cues:'Press heels down. Alternate pedalling.',                 timer:30},
+    {name:'Hip Flexor Stretch',   cat:'rest',  sets:'2', reps:'60 sec each',    load:'—',       cues:'Lunge position, tuck pelvis forward.',        timer:60},
+    {name:'Pigeon Pose',          cat:'rest',  sets:'2', reps:'60 sec each',    load:'—',       cues:'Hips square. Breathe into the stretch.',      timer:60},
+    {name:'Foam Roll Quads',      cat:'rest',  sets:'1', reps:'90 sec each',    load:'—',       cues:'Slow rolls. Pause on tight spots.',           timer:90},
+    {name:'Thoracic Rotation',    cat:'rest',  sets:'2', reps:'10 each',        load:'—',       cues:'Seated. Rotate fully, hold 2 sec.',           timer:30},
+    {name:'Calf Stretch',         cat:'rest',  sets:'2', reps:'45 sec each',    load:'—',       cues:'Straight leg against wall.',                  timer:45},
+    {name:'90-90 Hip Stretch',    cat:'rest',  sets:'2', reps:'60 sec each',    load:'—',       cues:"Both knees at 90°. Sit tall.",               timer:60},
+    {name:"World's Greatest Stretch",cat:'rest',sets:'2',reps:'5 each',         load:'—',       cues:'Lunge + rotation + reach.',                   timer:30},
+    {name:'Downward Dog',         cat:'rest',  sets:'3', reps:'30 sec',         load:'—',       cues:'Press heels down. Alternate pedalling.',      timer:30},
+    {name:'Ankle Mobility',       cat:'rest',  sets:'2', reps:'10 circles',     load:'—',       cues:'Full ROM circles each direction.',            timer:20},
+    {name:'Glute Stretch',        cat:'rest',  sets:'2', reps:'45 sec each',    load:'—',       cues:'Figure-4 stretch.',                           timer:45},
   ],
   'Olympic & Power': [
-    {name:'Power Clean',         cat:'str',    sets:'4', reps:'5',         load:'Moderate',cues:'Hip hinge, explosive pull, catch in rack position.', timer:120},
-    {name:'Hang Clean',          cat:'str',    sets:'4', reps:'5',         load:'Moderate',cues:'Start from hip. Fast elbows.',                       timer:120},
-    {name:'Box Jump',            cat:'str',    sets:'4', reps:'6',         load:'BW',   cues:'Land softly, full extension at top.',                   timer:75},
-    {name:'Broad Jump',          cat:'str',    sets:'4', reps:'5',         load:'BW',   cues:'Max distance. Hip extension at takeoff.',               timer:60},
-    {name:'Kettlebell Swing',    cat:'str',    sets:'4', reps:'15',        load:'KB',   cues:'Hip hinge drive. Hike the bell back.',                  timer:60},
-    {name:'Kettlebell Snatch',   cat:'str',    sets:'3', reps:'8 each',    load:'KB',   cues:'Punch through at top.',                                 timer:90},
-    {name:'Thruster',            cat:'str',    sets:'4', reps:'10',        load:'Barbell/DBs',cues:'Squat + press in one movement.',                  timer:90},
-    {name:'Clean & Press',       cat:'str',    sets:'3', reps:'6',         load:'Barbell',cues:'Full clean, strict press.',                          timer:120},
+    {name:'Power Clean',          cat:'str',   sets:'4', reps:'5',              load:'Moderate',cues:'Hip hinge, explosive pull, catch in rack.',   timer:120},
+    {name:'Box Jump',             cat:'str',   sets:'4', reps:'6',              load:'BW',      cues:'Land softly, full extension at top.',         timer:75},
+    {name:'Broad Jump',           cat:'str',   sets:'4', reps:'5',              load:'BW',      cues:'Max distance. Hip extension at takeoff.',     timer:60},
+    {name:'Kettlebell Swing',     cat:'str',   sets:'4', reps:'15',             load:'KB',      cues:'Hip hinge drive. Hike the bell back.',       timer:60},
+    {name:'Kettlebell Snatch',    cat:'str',   sets:'3', reps:'8 each',         load:'KB',      cues:'Punch through at top.',                       timer:90},
+    {name:'Thruster',             cat:'str',   sets:'4', reps:'10',             load:'Barbell/DBs',cues:'Squat + press in one movement.',          timer:90},
   ],
 };
 
-// Day names for builder
 const BUILDER_DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 const DAY_SHORT    = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 
-// ── CUSTOM PLAN MANAGEMENT ─────────────────────────────
-// D.customPlan = {
-//   name: "My Plan",
-//   weeks: [{ w:1, days:[ {d:'Sun', type:'str', title:'...', detail:'', exs:[...]} × 7 ] }]
-// }
+// ── BUILDER STATE ──────────────────────────────────────
+let builderWeek     = 1;
+let builderDay      = 0;
+let libSearchQuery  = '';
+let libActiveGroup  = 'All';
 
-function getCustomPlan() {
-  return D.customPlan || null;
-}
+// ── CUSTOM PLAN MANAGEMENT ─────────────────────────────
+function getCustomPlan() { return D.customPlan || null; }
 
 function ensureCustomPlan() {
   if (!D.customPlan) {
@@ -123,10 +119,10 @@ function ensureCustomPlan() {
         w: i+1,
         phase: `Week ${i+1}`,
         pc: '#e8ff47',
-        days: BUILDER_DAYS.map((d,di) => ({
+        days: BUILDER_DAYS.map((d, di) => ({
           d: DAY_SHORT[di],
-          type: di===0?'str':'rest',
-          title: di===0?'Strength + Light Run':'Rest / Recovery',
+          type: di===0 ? 'str' : 'rest',
+          title: di===0 ? 'Strength + Light Run' : 'Rest / Recovery',
           detail: '',
           exs: di===0 ? [
             {name:'Back Squat',sets:'3',reps:'10',load:'Moderate',rest:90,cues:'Full depth.',timer:90},
@@ -139,14 +135,6 @@ function ensureCustomPlan() {
   return D.customPlan;
 }
 
-// ── BUILDER STATE ──────────────────────────────────────
-let builderWeek     = 1;
-let builderDay      = 0;   // 0=Sun
-let draggedExercise = null; // { ...exObj } being dragged from library
-let draggedFromDay  = null; // {week, dayIdx, exIdx} if dragging within plan
-let libSearchQuery  = '';
-let libActiveGroup  = 'All';
-
 // ── RENDER BUILDER ─────────────────────────────────────
 function renderBuilder() {
   const pt = document.getElementById('pt-builder');
@@ -156,62 +144,210 @@ function renderBuilder() {
   pt.innerHTML = `
   <div class="builder-wrap">
 
-    <!-- LEFT: Exercise Library -->
-    <div class="builder-lib">
-      <div class="builder-lib-hdr">
-        <div class="sh-title" style="font-size:.9rem">📚 Exercise <span>Library</span></div>
-        <input id="libSearch" class="lib-search" placeholder="Search exercises…"
-          oninput="libSearchQuery=this.value;renderLibList()" value="${libSearchQuery}">
+    <!-- ── STEP 1: Pick week + day ── -->
+    <div class="builder-step-card">
+      <div class="builder-step-hdr">
+        <span class="builder-step-num">1</span>
+        <div>
+          <div style="font-weight:700;font-size:.9rem">Select Week &amp; Day</div>
+          <div style="font-size:.7rem;color:var(--m2)">Choose where to add exercises</div>
+        </div>
       </div>
-      <div class="lib-group-tabs" id="libGroupTabs"></div>
-      <div class="lib-list" id="libList"></div>
-      <div style="font-size:.65rem;color:var(--m1);padding:8px 0;text-align:center">
-        Drag any exercise onto a day slot →
+
+      <!-- Week selector -->
+      <div style="margin-bottom:12px">
+        <div class="ctitle">Week</div>
+        <div class="builder-week-grid" id="builderWkGrid"></div>
+      </div>
+
+      <!-- Day selector -->
+      <div>
+        <div class="ctitle">Day of Week</div>
+        <div class="builder-day-pills" id="builderDayPills"></div>
       </div>
     </div>
 
-    <!-- RIGHT: Plan Builder -->
-    <div class="builder-plan">
-      <div class="builder-plan-hdr">
-        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-          <div class="sh-title" style="font-size:.9rem">🗓 <span id="customPlanName">${D.customPlan?.name||'My Custom Plan'}</span></div>
-          <button class="btn-ghost" onclick="renamePlan()" style="font-size:.68rem;padding:4px 9px">✎ Rename</button>
-          <button class="btn-ghost" onclick="activateCustomPlan()" style="font-size:.68rem;padding:4px 9px;color:var(--accent);border-color:rgba(232,255,71,.3)">▶ Use This Plan</button>
-          <button class="btn-ghost" onclick="clearCustomPlan()" style="font-size:.68rem;padding:4px 9px;color:var(--red);border-color:rgba(255,61,85,.2)">✕ Clear All</button>
+    <!-- ── STEP 2: Current day exercises ── -->
+    <div class="builder-step-card">
+      <div class="builder-step-hdr">
+        <span class="builder-step-num">2</span>
+        <div style="flex:1">
+          <div style="font-weight:700;font-size:.9rem" id="builderDayTitle">Sunday — Week 1</div>
+          <div style="font-size:.7rem;color:var(--m2)" id="builderDayCount">0 exercises</div>
         </div>
-        <div style="display:flex;align-items:center;gap:6px;margin-top:10px;flex-wrap:wrap">
-          <span style="font-size:.7rem;color:var(--m2)">Week:</span>
-          <div style="display:flex;gap:3px;flex-wrap:wrap">
-            ${Array.from({length:12},(_,i)=>`<button class="wk-sel-btn${builderWeek===i+1?' active-wk':''}" onclick="builderWeek=${i+1};renderBuilderWeek()">W${i+1}</button>`).join('')}
-          </div>
+        <button class="btn-ghost" onclick="clearBuilderDay()" style="font-size:.7rem;padding:5px 10px;color:var(--red);border-color:rgba(255,61,85,.25)">Clear</button>
+      </div>
+      <div id="builderDayExercises"></div>
+      <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--b1);display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn-save" onclick="activateCustomPlan()" style="font-size:.78rem;padding:9px 16px">▶ Use This Plan</button>
+        <button class="btn-ghost" onclick="renamePlan()" style="font-size:.76rem">✎ Rename</button>
+        <button class="btn-ghost" onclick="clearCustomPlan()" style="font-size:.76rem;color:var(--red);border-color:rgba(255,61,85,.2)">✕ Clear All</button>
+      </div>
+    </div>
+
+    <!-- ── STEP 3: Exercise checklist ── -->
+    <div class="builder-step-card">
+      <div class="builder-step-hdr">
+        <span class="builder-step-num">3</span>
+        <div>
+          <div style="font-weight:700;font-size:.9rem">Add Exercises</div>
+          <div style="font-size:.7rem;color:var(--m2)">Tap ＋ to add to selected day</div>
         </div>
       </div>
 
-      <div id="builderWeekGrid"></div>
+      <!-- Search -->
+      <input id="libSearch" class="lib-search" placeholder="🔍  Search exercises…"
+        oninput="libSearchQuery=this.value;renderLibChecklist()" value="${libSearchQuery}"
+        style="margin-bottom:10px">
 
-      <!-- Day exercise list -->
-      <div id="builderDayPanel" style="margin-top:12px"></div>
+      <!-- Category tabs -->
+      <div class="lib-group-tabs" id="libGroupTabs" style="margin-bottom:10px"></div>
+
+      <!-- Exercise checklist -->
+      <div class="lib-checklist" id="libChecklist"></div>
     </div>
 
   </div>`;
 
-  renderLibGroups();
-  renderLibList();
-  renderBuilderWeek();
+  renderBuilderWkGrid();
+  renderBuilderDayPills();
+  renderBuilderDayPanel();
+  renderLibGroupTabs();
+  renderLibChecklist();
 }
 
-function renderLibGroups() {
+// ── WEEK SELECTOR GRID ─────────────────────────────────
+function renderBuilderWkGrid() {
+  const plan = ensureCustomPlan();
+  const el = document.getElementById('builderWkGrid');
+  if (!el) return;
+  el.innerHTML = Array.from({length:12}, (_,i) => {
+    const w = i+1;
+    const totalEx = plan.weeks[i].days.reduce((s,d) => s + d.exs.length, 0);
+    const isActive = builderWeek === w;
+    return `<button
+      class="builder-wk-btn${isActive ? ' builder-wk-active' : ''}"
+      onclick="builderWeek=${w};renderBuilderWkGrid();renderBuilderDayPills();renderBuilderDayPanel()">
+      <span class="bwk-label">W${w}</span>
+      ${totalEx > 0 ? `<span class="bwk-dot"></span>` : ''}
+    </button>`;
+  }).join('');
+}
+
+// ── DAY PILLS ──────────────────────────────────────────
+function renderBuilderDayPills() {
+  const plan = ensureCustomPlan();
+  const el = document.getElementById('builderDayPills');
+  if (!el) return;
+  const week = plan.weeks[builderWeek - 1];
+  el.innerHTML = week.days.map((day, di) => {
+    const isActive = builderDay === di;
+    const col = TC[tclass(day.type)] || '#888';
+    const hasEx = day.exs.length > 0;
+    return `<button
+      class="builder-day-pill${isActive ? ' builder-day-active' : ''}"
+      style="${isActive ? `border-color:${col};background:${col}18;` : ''}"
+      onclick="builderDay=${di};renderBuilderDayPills();renderBuilderDayPanel()">
+      <span style="font-weight:700;font-size:.72rem;color:${isActive?col:'var(--m1)'}">${day.d}</span>
+      ${hasEx ? `<span class="bpill-count">${day.exs.length}</span>` : ''}
+    </button>`;
+  }).join('');
+}
+
+// ── DAY EXERCISE LIST ──────────────────────────────────
+function renderBuilderDayPanel() {
+  const plan = ensureCustomPlan();
+  const day  = plan.weeks[builderWeek - 1].days[builderDay];
+  const col  = TC[tclass(day.type)] || '#888';
+
+  const titleEl = document.getElementById('builderDayTitle');
+  const countEl = document.getElementById('builderDayCount');
+  const listEl  = document.getElementById('builderDayExercises');
+  if (!titleEl || !listEl) return;
+
+  titleEl.textContent = `${BUILDER_DAYS[builderDay]} — Week ${builderWeek}`;
+  countEl.textContent = `${day.exs.length} exercise${day.exs.length !== 1 ? 's' : ''}`;
+
+  if (!day.exs.length) {
+    listEl.innerHTML = `<div style="text-align:center;padding:20px 10px;color:var(--m1);font-size:.8rem;border:1px dashed var(--b2);border-radius:var(--rsm)">
+      No exercises yet.<br>Tap <strong style="color:var(--accent)">＋ Add</strong> below to add from the library.
+    </div>`;
+    return;
+  }
+
+  listEl.innerHTML = day.exs.map((ex, i) => `
+    <div class="bex-row">
+      <div class="bex-handle">
+        <span class="bex-num">${i+1}</span>
+      </div>
+      <div class="bex-info">
+        <div class="bex-name">${ex.name}${ex.isCardio?'<span class="cardio-pill">cardio</span>':''}</div>
+        <div class="bex-meta">${ex.sets!=='1'?ex.sets+'×'+ex.reps:ex.reps} · ${ex.load||'BW'}</div>
+      </div>
+      <div class="bex-actions">
+        <button class="bex-action-btn" onclick="moveBexUp(${i})" ${i===0?'disabled':''} title="Move up">↑</button>
+        <button class="bex-action-btn" onclick="moveBexDown(${i})" ${i===day.exs.length-1?'disabled':''} title="Move down">↓</button>
+        <button class="bex-action-btn bex-del" onclick="removeBex(${i})" title="Remove">✕</button>
+      </div>
+    </div>`).join('');
+}
+
+function moveBexUp(idx) {
+  const day = ensureCustomPlan().weeks[builderWeek-1].days[builderDay];
+  if (idx === 0) return;
+  [day.exs[idx], day.exs[idx-1]] = [day.exs[idx-1], day.exs[idx]];
+  saveAll(); renderBuilderDayPanel();
+}
+function moveBexDown(idx) {
+  const day = ensureCustomPlan().weeks[builderWeek-1].days[builderDay];
+  if (idx === day.exs.length-1) return;
+  [day.exs[idx], day.exs[idx+1]] = [day.exs[idx+1], day.exs[idx]];
+  saveAll(); renderBuilderDayPanel();
+}
+function removeBex(idx) {
+  const day = ensureCustomPlan().weeks[builderWeek-1].days[builderDay];
+  day.exs.splice(idx, 1);
+  updateDayType(builderWeek, builderDay);
+  saveAll();
+  renderBuilderWkGrid();
+  renderBuilderDayPills();
+  renderBuilderDayPanel();
+}
+function clearBuilderDay() {
+  if (!confirm(`Clear all exercises from ${BUILDER_DAYS[builderDay]}?`)) return;
+  const day = ensureCustomPlan().weeks[builderWeek-1].days[builderDay];
+  day.exs = [];
+  updateDayType(builderWeek, builderDay);
+  saveAll();
+  renderBuilderWkGrid();
+  renderBuilderDayPills();
+  renderBuilderDayPanel();
+}
+
+// ── LIBRARY GROUP TABS ─────────────────────────────────
+function renderLibGroupTabs() {
   const groups = ['All', ...Object.keys(EXERCISE_LIBRARY)];
-  document.getElementById('libGroupTabs').innerHTML = groups.map(g => `
-    <button class="lib-group-btn${libActiveGroup===g?' active':''}" onclick="libActiveGroup='${g.replace(/'/g,"\\'").replace(/\//g,'\\/')}';renderLibGroups();renderLibList()">
-      ${g.length>18?g.slice(0,16)+'…':g}
-    </button>`).join('');
-  document.querySelectorAll('.lib-group-btn').forEach(b => {
-    b.classList.toggle('active', b.textContent.trim().startsWith(libActiveGroup.slice(0,10)));
-  });
+  const el = document.getElementById('libGroupTabs');
+  if (!el) return;
+  el.innerHTML = groups.map(g => {
+    const short = g === 'All' ? 'All' :
+      g.includes('Running') ? 'Cardio' :
+      g.includes('HYROX')   ? 'HYROX' :
+      g.includes('Legs')    ? 'Legs' :
+      g.includes('Push')    ? 'Push' :
+      g.includes('Pull')    ? 'Pull' :
+      g.includes('Core')    ? 'Core' :
+      g.includes('Mobility')? 'Mobility' :
+      g.includes('Olympic') ? 'Power' : g;
+    return `<button class="lib-group-btn${libActiveGroup===g?' active':''}"
+      onclick="libActiveGroup='${g.replace(/'/g,"\\'")}';renderLibGroupTabs();renderLibChecklist()">
+      ${short}
+    </button>`;
+  }).join('');
 }
 
-function renderLibList() {
+// ── EXERCISE CHECKLIST ─────────────────────────────────
+function renderLibChecklist() {
   const q = libSearchQuery.toLowerCase();
   let exs = [];
   if (libActiveGroup === 'All') {
@@ -219,255 +355,116 @@ function renderLibList() {
   } else {
     exs = EXERCISE_LIBRARY[libActiveGroup] || [];
   }
-  if (q) exs = exs.filter(e => e.name.toLowerCase().includes(q) || e.cat.includes(q) || (e.cues||'').toLowerCase().includes(q));
+  if (q) exs = exs.filter(e =>
+    e.name.toLowerCase().includes(q) ||
+    e.cat.toLowerCase().includes(q) ||
+    (e.cues||'').toLowerCase().includes(q)
+  );
 
-  document.getElementById('libList').innerHTML = exs.length
-    ? exs.map((e, i) => {
-        const yt = (typeof getYTLink === 'function') ? getYTLink(e.name) : null;
-        return `<div class="lib-ex-card" draggable="true"
-          ondragstart="onLibDragStart(event, '${encodeURIComponent(JSON.stringify(e))}')"
-          ondragend="onDragEnd(event)"
-          onclick="addExToCurrentDay(${encodeURIComponent(JSON.stringify(e))})"
-          title="Click to add to selected day · Drag to a specific slot">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px">
-            <div class="lib-ex-badge ${bclass(e.cat)}">${e.cat.toUpperCase()}</div>
-            ${yt?`<a href="${yt}" target="_blank" rel="noopener" class="yt-btn yt-btn-sm" onclick="event.stopPropagation()" title="Watch demo">▶</a>`:''}
-          </div>
-          <div class="lib-ex-name">${e.name}</div>
-          <div class="lib-ex-meta">${e.sets}×${e.reps}${e.load&&e.load!=='—'?' · '+e.load:''}</div>
-          <div class="lib-ex-drag">⠿</div>
-        </div>`;
-      }).join('')
-    : '<div style="text-align:center;color:var(--m1);padding:20px;font-size:.78rem">No exercises match</div>';
-}
+  const el = document.getElementById('libChecklist');
+  if (!el) return;
 
-// ── DRAG FROM LIBRARY ──────────────────────────────────
-function onLibDragStart(event, encoded) {
-  try { draggedExercise = JSON.parse(decodeURIComponent(encoded)); } catch { return; }
-  draggedFromDay = null;
-  event.dataTransfer.effectAllowed = 'copy';
-  event.target.style.opacity = '0.5';
-}
-
-// ── DRAG FROM PLAN (reorder) ───────────────────────────
-function onPlanExDragStart(event, week, dayIdx, exIdx) {
+  // Check which are already in the current day
   const plan = ensureCustomPlan();
-  draggedExercise = {...plan.weeks[week-1].days[dayIdx].exs[exIdx]};
-  draggedFromDay  = {week, dayIdx, exIdx};
-  event.dataTransfer.effectAllowed = 'move';
-  event.target.closest('.ex-card').style.opacity = '0.4';
-}
+  const currentDayExNames = new Set(
+    plan.weeks[builderWeek-1].days[builderDay].exs.map(e => e.name)
+  );
 
-function onDragEnd(event) {
-  event.target.style.opacity = '';
-  document.querySelectorAll('.drop-zone').forEach(z => z.classList.remove('drag-over'));
-}
-
-// ── DROP ONTO DAY SLOT ─────────────────────────────────
-function onDayDragOver(event) {
-  event.preventDefault();
-  event.currentTarget.classList.add('drag-over');
-  event.dataTransfer.dropEffect = draggedFromDay ? 'move' : 'copy';
-}
-function onDayDragLeave(event) { event.currentTarget.classList.remove('drag-over'); }
-
-function onDayDrop(event, week, dayIdx) {
-  event.preventDefault();
-  event.currentTarget.classList.remove('drag-over');
-  if (!draggedExercise) return;
-
-  const plan = ensureCustomPlan();
-  const day  = plan.weeks[week-1].days[dayIdx];
-
-  // If reordering within same day, remove from old position first
-  if (draggedFromDay && draggedFromDay.week===week && draggedFromDay.dayIdx===dayIdx) {
-    day.exs.splice(draggedFromDay.exIdx, 1);
-  } else if (draggedFromDay) {
-    // Moving from a different day — remove from source
-    plan.weeks[draggedFromDay.week-1].days[draggedFromDay.dayIdx].exs.splice(draggedFromDay.exIdx, 1);
-    updateDayType(draggedFromDay.week, draggedFromDay.dayIdx);
+  if (!exs.length) {
+    el.innerHTML = '<div style="text-align:center;color:var(--m1);padding:24px;font-size:.8rem">No exercises found</div>';
+    return;
   }
 
-  // Build a proper ex object
-  const newEx = {
-    name:     draggedExercise.name,
-    sets:     draggedExercise.sets || '3',
-    reps:     draggedExercise.reps || '10',
-    load:     draggedExercise.load || '—',
-    rest:     draggedExercise.rest || 75,
-    cues:     draggedExercise.cues || '',
-    timer:    draggedExercise.timer || 75,
-    isCardio: !!draggedExercise.isCardio,
-  };
-  day.exs.push(newEx);
-  updateDayType(week, dayIdx);
-
-  draggedExercise = null;
-  draggedFromDay  = null;
-  saveAll();
-  renderBuilderWeek();
-  if (builderDay === dayIdx) renderBuilderDayPanel();
-  showToast(`✅ ${newEx.name} added to ${DAY_SHORT[dayIdx]}`);
+  el.innerHTML = exs.map((e, i) => {
+    const alreadyAdded = currentDayExNames.has(e.name);
+    const yt = (typeof getYTLink === 'function') ? getYTLink(e.name) : null;
+    return `<div class="lib-check-row${alreadyAdded?' lib-check-added':''}">
+      <div class="lib-check-info">
+        <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:2px">
+          <span class="badge ${bclass(e.cat)}">${e.cat.toUpperCase()}</span>
+          <span class="lib-check-name">${e.name}</span>
+          ${yt ? `<a href="${yt}" target="_blank" rel="noopener" class="yt-btn yt-btn-sm" onclick="event.stopPropagation()" title="Watch demo">▶</a>` : ''}
+        </div>
+        <div class="lib-check-meta">${e.sets!=='1'?e.sets+'×':''} ${e.reps} · ${e.load||'BW'}</div>
+        ${e.cues ? `<div class="lib-check-cues">${e.cues}</div>` : ''}
+      </div>
+      <button
+        class="lib-add-btn${alreadyAdded?' lib-add-btn-done':''}"
+        onclick="addExerciseToDay(${i}, '${libActiveGroup}')"
+        title="${alreadyAdded ? 'Already added — tap to add again' : 'Add to '+BUILDER_DAYS[builderDay]}">
+        ${alreadyAdded ? '✓' : '＋'}
+      </button>
+    </div>`;
+  }).join('');
 }
 
-// Click-to-add: adds exercise to currently selected day in builder
-function addExToCurrentDay(encoded) {
-  let e;
-  try { e = typeof encoded==='string' ? JSON.parse(decodeURIComponent(encoded)) : encoded; } catch { return; }
+// ── ADD EXERCISE ───────────────────────────────────────
+function addExerciseToDay(libIdx, group) {
+  let exs = [];
+  if (group === 'All') {
+    Object.values(EXERCISE_LIBRARY).forEach(arr => exs.push(...arr));
+  } else {
+    exs = EXERCISE_LIBRARY[group] || [];
+  }
+  // Re-apply search filter
+  const q = libSearchQuery.toLowerCase();
+  if (q) exs = exs.filter(e =>
+    e.name.toLowerCase().includes(q) || e.cat.toLowerCase().includes(q)
+  );
+
+  const src = exs[libIdx];
+  if (!src) return;
+
   const plan = ensureCustomPlan();
   const day  = plan.weeks[builderWeek-1].days[builderDay];
-  const newEx = {
-    name:e.name, sets:e.sets||'3', reps:e.reps||'10',
-    load:e.load||'—', rest:e.rest||75, cues:e.cues||'',
-    timer:e.timer||75, isCardio:!!e.isCardio,
-  };
-  day.exs.push(newEx);
+
+  day.exs.push({
+    name:     src.name,
+    sets:     src.sets || '3',
+    reps:     src.reps || '10',
+    load:     src.load || '—',
+    rest:     src.rest || 75,
+    cues:     src.cues || '',
+    timer:    src.timer || 75,
+    isCardio: !!src.isCardio,
+  });
+
   updateDayType(builderWeek, builderDay);
   saveAll();
-  renderBuilderWeek();
+
+  // Update all panels
+  renderBuilderWkGrid();
+  renderBuilderDayPills();
   renderBuilderDayPanel();
-  showToast(`✅ ${newEx.name} added to ${BUILDER_DAYS[builderDay]}`);
+  renderLibChecklist(); // refresh checkmarks
+
+  showToast(`✅ ${src.name} added to ${DAY_SHORT[builderDay]}`);
 }
 
+// ── UPDATE DAY TYPE ────────────────────────────────────
 function updateDayType(week, dayIdx) {
   const plan = ensureCustomPlan();
   const day  = plan.weeks[week-1].days[dayIdx];
   if (!day.exs.length) {
-    day.type  = dayIdx===0 ? 'str' : 'rest';
-    day.title = dayIdx===0 ? 'Strength + Light Run' : 'Rest / Recovery';
+    day.type  = dayIdx === 0 ? 'str' : 'rest';
+    day.title = dayIdx === 0 ? 'Strength + Light Run' : 'Rest / Recovery';
     return;
   }
-  // Infer type from majority of exercises
-  const cats = day.exs.map(e => tclass(e.type||e.cat||e.name));
-  const counts = cats.reduce((acc,c)=>{acc[c]=(acc[c]||0)+1;return acc;},{});
+  const cats   = day.exs.map(e => tclass(e.type || e.cat || e.name));
+  const counts = cats.reduce((acc,c) => { acc[c]=(acc[c]||0)+1; return acc; }, {});
   const dominant = Object.entries(counts).sort((a,b)=>b[1]-a[1])[0]?.[0] || 'str';
   day.type  = dominant;
-  // Build title from exercise names
-  const names = day.exs.slice(0,3).map(e=>e.name).join(' · ');
-  day.title = names + (day.exs.length>3?` +${day.exs.length-3}`:'');
+  day.title = day.exs.slice(0,3).map(e=>e.name).join(' · ') + (day.exs.length>3?` +${day.exs.length-3}`:'');
 }
 
-// ── BUILDER WEEK GRID ──────────────────────────────────
-function renderBuilderWeek() {
-  const plan = ensureCustomPlan();
-  const week = plan.weeks[builderWeek-1];
-  const container = document.getElementById('builderWeekGrid');
-  if (!container) return;
-
-  container.innerHTML = `<div class="builder-day-grid">
-    ${week.days.map((day, di) => {
-      const col = TC[tclass(day.type)] || '#888';
-      const isActive = builderDay === di;
-      return `<div class="builder-day-col${isActive?' bdc-active':''}"
-          ondragover="onDayDragOver(event)"
-          ondragleave="onDayDragLeave(event)"
-          ondrop="onDayDrop(event, ${builderWeek}, ${di})"
-          onclick="builderDay=${di};renderBuilderWeek();renderBuilderDayPanel()"
-          style="border-color:${isActive?col:'var(--b1)'}">
-        <div class="bdc-header" style="color:${col}">
-          <span class="bdc-day">${day.d}</span>
-          <span class="bdc-type badge ${bclass(day.type)}" style="font-size:.52rem">${day.type.toUpperCase()}</span>
-        </div>
-        <div class="bdc-exs">
-          ${day.exs.length
-            ? day.exs.slice(0,4).map(e=>`<div class="bdc-ex-pill">${e.name}</div>`).join('') + (day.exs.length>4?`<div class="bdc-more">+${day.exs.length-4} more</div>`:'')
-            : `<div class="drop-zone" style="color:var(--m1);font-size:.62rem;text-align:center;padding:8px 4px;border:1px dashed var(--b2);border-radius:6px">Drop here</div>`
-          }
-        </div>
-        <div class="bdc-count" style="color:${col}">${day.exs.length} ex</div>
-      </div>`;
-    }).join('')}
-  </div>`;
-
-  renderBuilderDayPanel();
-}
-
-function renderBuilderDayPanel() {
-  const plan = ensureCustomPlan();
-  const day  = plan.weeks[builderWeek-1].days[builderDay];
-  const panel= document.getElementById('builderDayPanel');
-  if (!panel) return;
-  const col  = TC[tclass(day.type)] || '#888';
-
-  panel.innerHTML = `
-  <div class="card" style="border-left:2px solid ${col}">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
-      <div>
-        <span class="badge ${bclass(day.type)}" style="margin-right:8px">${day.type.toUpperCase()}</span>
-        <strong style="font-size:.9rem">${BUILDER_DAYS[builderDay]} — Week ${builderWeek}</strong>
-        <div style="font-size:.72rem;color:var(--m2);margin-top:3px">${day.exs.length} exercises · Click an exercise in the library to add</div>
-      </div>
-      <button class="btn-ghost" onclick="clearDay(${builderWeek},${builderDay})" style="font-size:.7rem;color:var(--red);border-color:rgba(255,61,85,.2)">Clear day</button>
-    </div>
-    ${day.exs.length===0
-      ? `<div style="text-align:center;padding:30px;color:var(--m1);border:1px dashed var(--b2);border-radius:8px;font-size:.8rem">
-          No exercises yet.<br>Click or drag from the library →
-        </div>`
-      : `<div id="builderExList">${day.exs.map((e,i) => builderExRow(e,i,day.exs.length)).join('')}</div>`
-    }
-  </div>`;
-}
-
-function builderExRow(e, idx, total) {
-  const w=builderWeek,di=builderDay;
-  return `<div class="builder-ex-row" id="bexrow_${idx}"
-    draggable="true"
-    ondragstart="onPlanExDragStart(event,${w},${di},${idx})"
-    ondragend="onDragEnd(event)">
-    <div class="bex-drag-handle" title="Drag to reorder">⠿</div>
-    <div class="bex-body">
-      <div style="font-weight:600;font-size:.84rem">${e.name}${e.isCardio?'<span class="cardio-pill">cardio</span>':''}</div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:3px">
-        <label style="font-size:.66rem;color:var(--m1)">Sets <input type="number" class="bex-input" value="${e.sets}" min="1" max="10" onchange="updateExField(${w},${di},${idx},'sets',this.value)"></label>
-        <label style="font-size:.66rem;color:var(--m1)">Reps <input class="bex-input bex-reps" value="${e.reps}" onchange="updateExField(${w},${di},${idx},'reps',this.value)"></label>
-        <label style="font-size:.66rem;color:var(--m1)">Load <input class="bex-input bex-load" value="${e.load||'—'}" onchange="updateExField(${w},${di},${idx},'load',this.value)"></label>
-        <label style="font-size:.66rem;color:var(--m1)">Rest(s) <input type="number" class="bex-input" value="${e.rest||75}" min="0" max="300" onchange="updateExField(${w},${di},${idx},'rest',+this.value)"></label>
-      </div>
-      ${e.cues?`<div style="font-size:.68rem;color:var(--m2);font-style:italic;margin-top:3px">${e.cues}</div>`:''}
-    </div>
-    <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0">
-      <button class="bex-btn" onclick="moveEx(${w},${di},${idx},-1)" ${idx===0?'disabled':''} title="Move up">▲</button>
-      <button class="bex-btn" onclick="moveEx(${w},${di},${idx},1)"  ${idx===total-1?'disabled':''} title="Move down">▼</button>
-      <button class="bex-btn bex-del" onclick="removeEx(${w},${di},${idx})" title="Remove">✕</button>
-    </div>
-  </div>`;
-}
-
-function updateExField(week, dayIdx, exIdx, field, val) {
-  const plan = ensureCustomPlan();
-  plan.weeks[week-1].days[dayIdx].exs[exIdx][field] = val;
+// ── PLAN ACTIONS ───────────────────────────────────────
+function renamePlan() {
+  const name = prompt('Plan name:', D.customPlan?.name || 'My Custom Plan');
+  if (!name) return;
+  ensureCustomPlan();
+  D.customPlan.name = name;
   saveAll();
-}
-
-function moveEx(week, dayIdx, exIdx, dir) {
-  const plan = ensureCustomPlan();
-  const exs  = plan.weeks[week-1].days[dayIdx].exs;
-  const newIdx = exIdx + dir;
-  if (newIdx < 0 || newIdx >= exs.length) return;
-  [exs[exIdx], exs[newIdx]] = [exs[newIdx], exs[exIdx]];
-  saveAll();
-  renderBuilderDayPanel();
-}
-
-function removeEx(week, dayIdx, exIdx) {
-  const plan = ensureCustomPlan();
-  plan.weeks[week-1].days[dayIdx].exs.splice(exIdx, 1);
-  updateDayType(week, dayIdx);
-  saveAll();
-  renderBuilderWeek();
-  renderBuilderDayPanel();
-  showToast('Exercise removed');
-}
-
-function clearDay(week, dayIdx) {
-  if (!confirm(`Clear all exercises from ${BUILDER_DAYS[dayIdx]}?`)) return;
-  const plan = ensureCustomPlan();
-  plan.weeks[week-1].days[dayIdx].exs = [];
-  updateDayType(week, dayIdx);
-  saveAll();
-  renderBuilderWeek();
-  renderBuilderDayPanel();
-  showToast('Day cleared');
+  showToast('Plan renamed');
 }
 
 function clearCustomPlan() {
@@ -476,16 +473,6 @@ function clearCustomPlan() {
   saveAll();
   renderBuilder();
   showToast('Custom plan cleared');
-}
-
-function renamePlan() {
-  const name = prompt('Plan name:', D.customPlan?.name || 'My Custom Plan');
-  if (!name) return;
-  ensureCustomPlan();
-  D.customPlan.name = name;
-  saveAll();
-  document.getElementById('customPlanName').textContent = name;
-  showToast('Plan renamed');
 }
 
 function activateCustomPlan() {
