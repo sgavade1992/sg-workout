@@ -31,6 +31,7 @@ async function setActiveProgram(id) {
   });
   const active = document.querySelector('.screen.active')?.id?.replace('screen-','');
   ({dash:renderDash,calendar:renderCal,week:renderWeek,program:renderProgram})[active]?.();
+  updateProgTrigger(id);
   showToast(`✅ Switched to ${getActiveProgramLabel()}`);
 }
 
@@ -91,9 +92,9 @@ function showToast(msg, col) {
 // ── NAV ───────────────────────────────────────────────
 function nav(id, btn) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.npill').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.npill,.fbar-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('screen-'+id)?.classList.add('active');
-  btn ? btn.classList.add('active') : document.querySelector(`[data-nav="${id}"]`)?.classList.add('active');
+  if(btn){btn.classList.add('active');}else{document.querySelectorAll(`[data-nav="${id}"]`).forEach(b=>b.classList.add('active'));}
   ({dash:renderDash,calendar:renderCal,week:renderWeek,program:renderProgram,log:renderLog,settings:renderSettings})[id]?.();
 }
 
@@ -256,3 +257,25 @@ function exportJSON() {
   showToast('✅ JSON exported!');
 }
 function dlFile(n,c,m){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([c],{type:m}));a.download=n;a.click();}
+
+// ── PROGRAM MENU TOGGLE ───────────────────────────────
+function toggleProgMenu() {
+  const menu = document.getElementById('progMenu');
+  const overlay = document.getElementById('progMenuOverlay');
+  const isOpen = menu?.classList.contains('open');
+  if (isOpen) { closeProgMenu(); } else { menu?.classList.add('open'); overlay?.classList.add('open'); }
+}
+function closeProgMenu() {
+  document.getElementById('progMenu')?.classList.remove('open');
+  document.getElementById('progMenuOverlay')?.classList.remove('open');
+}
+
+// Update the trigger button label when program changes
+function updateProgTrigger(id) {
+  const map = { hyrox:['🏁','HYROX'], gym:['🏋️','Gym'], wl:['🔥','Weight Loss'], custom:['🔨','Custom'] };
+  const [icon, label] = map[id] || map.hyrox;
+  const ti = document.getElementById('progTriggerIcon');
+  const tl = document.getElementById('progTriggerLabel');
+  if (ti) ti.textContent = icon;
+  if (tl) tl.textContent = label;
+}
