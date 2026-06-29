@@ -48,9 +48,6 @@
       <button class="btn-plus" onclick="openModal()">+ Log</button>
     </div>
 
-<!-- React-powered floating taskbar -->
-<div id="react-taskbar"></div>
-
 <!-- Program 2×2 grid menu -->
 <div class="prog-menu-overlay" id="progMenuOverlay" onclick="closeProgMenu()"></div>
 <div class="prog-menu" id="progMenu">
@@ -444,5 +441,9 @@ initApp().then(()=>{
   if(window.startRealtimeSync) startRealtimeSync();
 });
 </script>
+
+<!-- React floating taskbar — fixed to bottom of viewport -->
+<div id="react-taskbar"></div>
+
 </body>
 </html>
