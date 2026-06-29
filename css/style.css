@@ -785,3 +785,224 @@ input, select, textarea {
   .page { max-width: 1280px; }
   .three-col { grid-template-columns: 1fr 1fr 1fr; }
 }
+
+/* ═══════════════════════════════════════════════════
+   PROGRAM TRIGGER BUTTON (header)
+═══════════════════════════════════════════════════ */
+.prog-trigger {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--panel);
+  border: 1px solid var(--b2);
+  border-radius: var(--rsm);
+  padding: 6px 10px;
+  cursor: pointer;
+  color: var(--text);
+  font-size: .74rem;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: border-color .15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.prog-trigger:hover, .prog-trigger:active { border-color: var(--accent); }
+.prog-trigger-arrow { color: var(--m1); font-size: .6rem; transition: transform .2s; }
+.prog-trigger.open .prog-trigger-arrow { transform: rotate(180deg); }
+
+/* ── SYNC DOT in header ── */
+.sync-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--m1); flex-shrink: 0;
+  transition: background .3s, box-shadow .3s;
+  cursor: pointer;
+  display: block;
+}
+
+/* hdr-right flex container */
+.hdr-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════════════════
+   PROGRAM 2×2 GRID MENU
+═══════════════════════════════════════════════════ */
+.prog-menu-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 298;
+  background: rgba(0,0,0,.5);
+  backdrop-filter: blur(3px);
+}
+.prog-menu-overlay.open { display: block; }
+
+.prog-menu {
+  display: none;
+  position: fixed;
+  top: 60px;
+  right: 12px;
+  z-index: 299;
+  width: 280px;
+  background: var(--surf);
+  border: 1px solid var(--b2);
+  border-radius: var(--r);
+  padding: 14px;
+  box-shadow: 0 8px 40px rgba(0,0,0,.5);
+  animation: fadeInDown .2s ease;
+}
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: none; }
+}
+.prog-menu.open { display: block; }
+
+.prog-menu-title {
+  font-size: .62rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--m1);
+  margin-bottom: 10px;
+}
+
+.prog-menu-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.prog-menu-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 8px;
+  background: var(--panel);
+  border: 1.5px solid var(--b1);
+  border-radius: var(--r);
+  cursor: pointer;
+  transition: all .15s;
+  color: var(--text);
+  -webkit-tap-highlight-color: transparent;
+}
+.prog-menu-btn:hover { border-color: var(--b2); background: var(--panel2); }
+.prog-menu-btn.prog-btn-active {
+  border-color: var(--accent);
+  background: rgba(232,255,71,.08);
+}
+.pmb-icon { font-size: 1.6rem; line-height: 1; }
+.pmb-name { font-size: .78rem; font-weight: 700; color: var(--text); }
+.pmb-sub  { font-size: .62rem; color: var(--m2); }
+.prog-menu-btn.prog-btn-active .pmb-name { color: var(--accent); }
+
+/* ═══════════════════════════════════════════════════
+   FLOATING BOTTOM TASKBAR
+═══════════════════════════════════════════════════ */
+.float-bar {
+  position: fixed;
+  bottom: calc(16px + var(--safe-bot));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 250;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: rgba(13,13,24,.92);
+  backdrop-filter: blur(24px) saturate(1.5);
+  -webkit-backdrop-filter: blur(24px) saturate(1.5);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 999px;
+  padding: 6px 8px;
+  box-shadow:
+    0 4px 30px rgba(0,0,0,.5),
+    0 0 0 1px rgba(255,255,255,.04) inset;
+  /* Adaptive width: fill on small, compact on large */
+  width: calc(100vw - 28px);
+  max-width: 520px;
+}
+
+.fbar-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 8px 4px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  color: var(--m1);
+  font-size: .54rem;
+  font-weight: 700;
+  letter-spacing: .3px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all .2s cubic-bezier(.4,0,.2,1);
+  min-width: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+.fbar-btn:hover { color: var(--m2); }
+.fbar-btn.active {
+  background: rgba(232,255,71,.12);
+  color: var(--accent);
+}
+.fbar-btn.active .fbar-icon {
+  filter: drop-shadow(0 0 5px rgba(232,255,71,.5));
+}
+.fbar-icon {
+  width: 20px; height: 20px;
+  transition: transform .2s;
+  flex-shrink: 0;
+}
+.fbar-btn:active .fbar-icon { transform: scale(.88); }
+.fbar-btn span { line-height: 1; white-space: nowrap; }
+
+/* Centre LOG button — elevated pill */
+.fbar-log-btn {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: none;
+  background: var(--accent);
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin: 0 2px;
+  box-shadow: 0 2px 16px rgba(232,255,71,.35);
+  transition: all .2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.fbar-log-btn:active { transform: scale(.93); box-shadow: 0 1px 8px rgba(232,255,71,.2); }
+
+/* Page padding to clear the taskbar */
+.page {
+  padding-bottom: calc(88px + var(--safe-bot)) !important;
+}
+
+/* ── DESKTOP: hide float-bar, show top nav ── */
+@media (min-width: 768px) {
+  .float-bar { display: none; }
+  .nav-wrap  { display: flex !important; }
+  .page { padding-bottom: 40px !important; }
+  /* Prog menu on desktop: top-right dropdown */
+  .prog-menu { top: 58px; right: 16px; width: 300px; }
+}
+
+/* ── PHONE: hide top nav links ── */
+@media (max-width: 767px) {
+  .nav-wrap { display: none !important; }
+  /* Taskbar text: hide on very small */
+}
+@media (max-width: 360px) {
+  .fbar-btn span { display: none; }
+  .float-bar { padding: 6px 6px; }
+  .fbar-btn { padding: 8px 6px; }
+}
