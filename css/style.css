@@ -61,7 +61,7 @@ select option{background:var(--panel)}
 .bnav-btn{
   flex:1;display:flex;flex-direction:column;align-items:center;
   justify-content:center;gap:2px;padding:6px 2px;
-  color:var(--m1);background:rgba(7,7,14,.97);border:none;
+  color:var(--m1);background:transparent;border:none;
   font-size:.56rem;font-weight:700;letter-spacing:.4px;
   text-transform:uppercase;cursor:pointer;
   transition:color .15s;-webkit-tap-highlight-color:transparent;
@@ -85,6 +85,21 @@ select option{background:var(--panel)}
 .logo{font-family:var(--ffd);font-size:1.2rem;font-weight:900;letter-spacing:1px;flex:1}
 .logo em{color:var(--accent);font-style:normal}
 .logo small{font-weight:400;font-size:.65rem;color:var(--m1);letter-spacing:0}
+
+/* ── NAV PILLS ── */
+.nav-wrap{
+  display:flex;gap:2px;
+  background:var(--surf);border:1px solid var(--b1);border-radius:var(--rsm);
+  padding:3px;overflow-x:auto;scrollbar-width:none;flex:1;
+}
+.nav-wrap::-webkit-scrollbar{display:none}
+.npill{
+  padding:5px 12px;font-size:.68rem;font-weight:700;letter-spacing:.4px;
+  text-transform:uppercase;border-radius:4px;color:var(--m1);
+  white-space:nowrap;background:transparent;transition:all .15s;border:none;cursor:pointer;
+}
+.npill:hover{color:var(--text);background:var(--panel2)}
+.npill.active{background:var(--accent);color:#000;}
 
 /* Sync dot in header */
 .sync-dot{
@@ -155,7 +170,7 @@ select option{background:var(--panel)}
 .hero-sub{font-size:.78rem;color:var(--m2);margin-top:2px}
 .phase-pill{
   display:inline-flex;align-items:center;gap:5px;
-  background:rgba(244,196,48,.08);border:1px solid rgba(244,196,48,.25);
+  background:rgba(232,255,71,.08);border:1px solid rgba(232,255,71,.25);
   color:var(--accent);border-radius:99px;padding:3px 10px;
   font-size:.62rem;font-weight:700;margin-top:6px;
 }
@@ -569,3 +584,204 @@ select option{background:var(--panel)}
 /* Table scroll wrapper */
 .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 .table-scroll table { min-width: 500px; }
+
+/* ═══════════════════════════════════════════════════
+   YOUTUBE DEMO BUTTON
+═══════════════════════════════════════════════════ */
+.ex-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 3px;
+  flex-wrap: wrap;
+}
+.ex-name {
+  font-weight: 600;
+  font-size: .88rem;
+  transition: all .2s;
+  line-height: 1.2;
+}
+.ex-card.done .ex-name { color: var(--m1); text-decoration: line-through; }
+
+.yt-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: rgba(255, 0, 0, .12);
+  color: #ff4444;
+  border: 1px solid rgba(255, 0, 0, .25);
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: .62rem;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all .15s;
+  flex-shrink: 0;
+  line-height: 1.4;
+  -webkit-tap-highlight-color: transparent;
+}
+.yt-btn:hover, .yt-btn:active {
+  background: rgba(255, 0, 0, .22);
+  color: #ff2222;
+}
+.yt-btn-sm {
+  padding: 1px 6px;
+  font-size: .58rem;
+}
+
+/* ═══════════════════════════════════════════════════
+   MOBILE-FIRST RESPONSIVE FIXES
+═══════════════════════════════════════════════════ */
+
+/* Touch-friendly tap targets everywhere */
+button, a, .ex-chk, .check-circle, .b-item,
+.cal-cell, .wg-day, .day-tab-btn, .lib-ex-card,
+.builder-day-col, .npill, .bnav-btn, .prog-sw-btn {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* Prevent text selection on interactive elements */
+.ex-chk, .check-circle, .bnav-btn, .npill,
+.prog-sw-btn, .wg-day, .cal-cell {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Fix inputs on iOS — prevent zoom */
+input, select, textarea {
+  font-size: 16px !important;
+}
+
+/* Smooth scrolling for tab rows */
+.nav-wrap, .day-tabs-row, .plan-tab-row,
+.lib-group-tabs, .prog-switcher {
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+}
+
+/* ── PHONE (≤ 480px) ── */
+@media (max-width: 480px) {
+  /* Tighter page padding */
+  .page { padding: 10px 10px calc(64px + var(--safe-bot)); }
+
+  /* Header: logo + sync dot + log button only */
+  .hdr-inner { padding: 8px 10px; gap: 7px; }
+  .logo small { display: none; }
+  #userInfo { display: none; }
+
+  /* Nav pills: hide on mobile — use bottom nav instead */
+  .nav-wrap { display: none !important; }
+
+  /* Bottom nav: larger touch targets */
+  .bottom-nav { height: calc(62px + var(--safe-bot)); }
+  .bnav-btn { font-size: .54rem; }
+  .bnav-btn .bni { font-size: 1.3rem; }
+
+  /* Program switcher: icon only on very small screens */
+  .prog-sw-btn { padding: 5px 7px; font-size: .6rem; }
+
+  /* Stack everything single column */
+  .two-col, .three-col, .four-col { grid-template-columns: 1fr; }
+  .stat-grid { grid-template-columns: 1fr 1fr; }
+  .improve-grid { grid-template-columns: 1fr; }
+
+  /* Hero band: vertical stack */
+  .hero-band { flex-direction: column; gap: 10px; padding: 14px; }
+  .hero-num { font-size: 2.6rem; }
+
+  /* Calendar: more compact */
+  .cal-cell { min-height: 40px; padding: 3px 2px; }
+  .cal-num { font-size: .6rem; }
+  .cal-dtype { font-size: .48rem; }
+  .cal-dlbl { font-size: .46rem; }
+  .cal-wk { display: none; }
+  .cal-hdr-cell { font-size: .55rem; padding: 4px 1px; }
+
+  /* Week day grid: condensed */
+  .wg-grid { gap: 2px; }
+  .wg-day { min-height: 46px; padding: 5px 2px; }
+  .wg-lbl { font-size: .48rem; }
+
+  /* Day tabs: scrollable, fixed size */
+  .day-tab-btn { min-width: 40px; padding: 6px 3px; }
+  .day-tab-lbl { font-size: .48rem; max-width: 38px; }
+
+  /* Plan tabs: scrollable row */
+  .plan-tab-btn { padding: 7px 8px; min-width: 70px; }
+  .plan-tab-lbl { font-size: .54rem; }
+
+  /* Week selector: 4 per row */
+  .wk-sel-grid { grid-template-columns: repeat(4, 1fr); }
+
+  /* Exercise cards: comfortable padding */
+  .ex-card { padding: 11px; }
+  .ex-chk { width: 26px; height: 26px; min-width: 26px; font-size: .82rem; }
+  .ex-name { font-size: .84rem; }
+  .ex-cues { font-size: .72rem; }
+
+  /* Timer: compact */
+  .timer-row { padding: 5px 8px; gap: 6px; }
+  .timer-ring { width: 30px; height: 30px; }
+
+  /* Log form: single column */
+  .lf-row { grid-template-columns: 1fr; gap: 8px; }
+
+  /* Builder: full width list */
+  .builder-day-grid { grid-template-columns: repeat(4, 1fr); gap: 4px; }
+  .builder-day-col { min-height: 64px; }
+  .lib-list { max-height: 220px; }
+
+  /* Benchmarks: single column */
+  .bench-grid { grid-template-columns: 1fr; }
+
+  /* Modal: takes more screen */
+  .modal-box { padding: 16px 12px calc(12px + var(--safe-bot)); }
+
+  /* Recent table: horizontal scroll */
+  .table-scroll { margin: 0 -10px; padding: 0 10px; }
+
+  /* Charts: slightly shorter */
+  .chart-box { height: 120px; }
+}
+
+/* ── TABLET (481px – 767px) ── */
+@media (min-width: 481px) and (max-width: 767px) {
+  .page { padding: 14px 14px calc(66px + var(--safe-bot)); }
+  .two-col { grid-template-columns: 1fr 1fr; }
+  .three-col { grid-template-columns: 1fr 1fr; }
+  .four-col { grid-template-columns: 1fr 1fr; }
+  .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  .wk-sel-grid { grid-template-columns: repeat(6, 1fr); }
+  .bench-grid { grid-template-columns: 1fr 1fr; }
+  .improve-grid { grid-template-columns: 1fr 1fr; }
+  .builder-day-grid { grid-template-columns: repeat(7, 1fr); }
+  .nav-wrap { display: none !important; }
+}
+
+/* ── DESKTOP (≥ 768px) ── */
+@media (min-width: 768px) {
+  .page { max-width: 1100px; padding: 20px 24px calc(30px); }
+  .stat-grid { grid-template-columns: repeat(4, 1fr); }
+  .two-col { grid-template-columns: 1fr 1fr; }
+  .three-col { grid-template-columns: 1fr 1fr 1fr; }
+  .four-col { grid-template-columns: repeat(4, 1fr); }
+  .improve-grid { grid-template-columns: repeat(3, 1fr); }
+  .bench-grid { grid-template-columns: 1fr 1fr; }
+  .wk-sel-grid { grid-template-columns: repeat(12, 1fr); }
+  .builder-wrap { flex-direction: row; align-items: start; }
+  .builder-lib { width: 280px; flex-shrink: 0; position: sticky; top: 70px; max-height: calc(100vh - 90px); display: flex; flex-direction: column; }
+  .lib-list { flex: 1; max-height: none; }
+  .builder-plan { flex: 1; min-width: 0; }
+  /* On desktop use top nav, hide bottom nav */
+  .bottom-nav { display: none; }
+  .nav-wrap { display: flex !important; }
+  /* Desktop page has no bottom nav so less bottom padding */
+}
+
+/* ── LARGE DESKTOP (≥ 1200px) ── */
+@media (min-width: 1200px) {
+  .page { max-width: 1280px; }
+  .three-col { grid-template-columns: 1fr 1fr 1fr; }
+}
