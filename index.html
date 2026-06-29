@@ -55,10 +55,10 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:'I
 .hero-sub{font-size:.9rem;color:var(--m2);max-width:420px;margin:0 auto 32px;line-height:1.7}
 
 /* Feature pills */
-.features{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:36px} 
+.features{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:36px}
 .feat{
   display:flex;align-items:center;gap:6px;
-  background:rgba(244,196,48,.04);border:1px solid var(--b2);
+  background:rgba(255,255,255,.04);border:1px solid var(--b2);
   border-radius:99px;padding:5px 14px;font-size:.74rem;color:var(--m2);
 }
 .feat span{font-size:.9rem}
@@ -169,12 +169,12 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:'I
         <img src="icon-192.png" width="52" height="52" alt="SG Workout" style="border-radius:12px" onerror="this.style.display='none';this.parentElement.textContent='💪'">
       </div>
       <div class="logo-text"><em>SG</em> Workout</div>
-      <div class="logo-tagline">by sgavade · Workout Training Hub</div>
+      <div class="logo-tagline">by sgavade · HYROX Training Hub</div>
     </div>
 
     <!-- Headline -->
     <h1 class="hero-headline">Train hard.<br><span>Track everything.</span></h1>
-    <p class="hero-sub">12-week workout plan, beginner gym program, and weight loss journey — all in one place. Your progress syncs across every device, automatically.</p>
+    <p class="hero-sub">12-week HYROX plan, beginner gym program, and weight loss journey — all in one place. Your progress syncs across every device, automatically.</p>
 
     <!-- Features -->
     <div class="features">
@@ -272,8 +272,8 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:'I
 // ════════════════════════════════════════════════
 // SUPABASE CONFIG
 // ════════════════════════════════════════════════
-const SUPABASE_URL = 'https://avuemmebwbsnarugsiyc.supabase.co';      // ← replace
-const SUPABASE_KEY = 'sb_publishable_rnWIinum-pOzdHbSjnJSvQ_vHBVUbLR'; // ← replace
+const SUPABASE_URL = 'https://avuemmebwbsnarugsiyc.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_rnWIinum-pOzdHbSjnJSvQ_vHBVUbLR';
 
 const { createClient } = supabase;
 const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -360,10 +360,8 @@ async function doSignUp() {
   });
   setLoading('btnSignup', false);
   if (error) { showMsg(error.message); return; }
-  if (data.user?.identities?.length === 0) {
-    showMsg('An account with this email already exists. Try signing in.'); return;
-  }
-  showMsg('Account created! Check your email to confirm, then sign in.', 'success');
+  showMsg("Account created! Taking you in…", "success");
+  setTimeout(() => window.location.replace("workout.html"), 1200);
 }
 
 // ── GOOGLE ────────────────────────────────────
